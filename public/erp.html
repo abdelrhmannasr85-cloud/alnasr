@@ -269,10 +269,8 @@ table.tbl tr:hover td{background:#faf7ee}
     <button class="btn-gold" onclick="doLogin()">تسجيل الدخول</button>
     <div id="loginError"></div>
     <div class="login-hint">
-      <b>حسابات النظام:</b><br>
-      المستشار عبدالرحمن نصر (الإدارة): <b>nasser / nasser2024</b><br>
-      الاستقبال: <b>reception / 1234</b> — الإداري: <b>admin / 1234</b><br>
-      الباحث القانوني: <b>legal / 1234</b> — المحاسب: <b>account / 1234</b>
+      🔐 الدخول مقصور على موظفي المكتب — تصدر بيانات الحسابات من مدير النظام (المستشار عبدالرحمن نصر).
+      <br>وصول الصفحة نفسه محمي بمصادقة الخادم (Supabase) — غيّر كلمات المرور دوريًا من قسم الإدارة.
     </div>
   </div>
 </div>
@@ -619,7 +617,7 @@ let DB = null, CUR = null;
 function uid(p){ return p + "-" + Math.random().toString(36).slice(2,7).toUpperCase(); }
 function today(){ return new Date().toISOString().slice(0,10); }
 function fmt(n){ return (Number(n)||0).toLocaleString("en-US"); }
-function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;").replace(/'/g,"&#39;"); }
 function bankName(id){ const b = BANKS.find(x=>x.id===id); return b ? b.ar : (id||"—"); }
 function roleOf(id){ return ROLES.find(r=>r.id===id); }
 function tmplOf(id){ return ALL_TEMPLATES().find(t=>t.id===id); }
