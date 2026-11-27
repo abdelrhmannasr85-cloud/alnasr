@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>النصر | نظام إدارة مكتب المحاماة والدعاوى البنكية - دبي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy-900:#0a1120; --navy-800:#0e1a30; --navy-700:#132341; --navy-600:#1a2f56; --navy-500:#24406e;
+  --gold:#c9a24b; --gold-bright:#e6c877; --gold-dim:#8a6d2f;
+  --green:#22c55e; --red:#ef4444; --amber:#f59e0b; --blue:#3b82f6; --teal:#14b8a6; --purple:#a855f7;
+  --bg:#f1f3f7; --card:#ffffff; --ink:#101828; --muted:#667085; --line:#e4e7ec;
+  --shadow:0 4px 18px rgba(10,17,32,.08); --radius:14px;
+  --sidebar-w:262px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:'Cairo','Tajawal',sans-serif;background:var(--bg);color:var(--ink);font-size:14.5px;line-height:1.65}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-thumb{background:#b9c0cc;border-radius:8px}
+::-webkit-scrollbar-track{background:transparent}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:14px;padding:9px 12px;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);width:100%;outline:none;transition:.2s}
+input:focus,select:focus,textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,162,75,.15)}
+label{font-weight:700;font-size:12.5px;color:var(--navy-700);display:block;margin-bottom:5px}
+.hidden{display:none!important}
+
+/* ============ LOGIN ============ */
+#loginScreen{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;background:radial-gradient(1200px 600px at 20% 10%,#1a2f56 0%,#0a1120 55%),var(--navy-900);overflow:hidden}
+#loginScreen::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(201,162,75,.045) 0 2px,transparent 2px 90px)}
+.login-card{position:relative;z-index:2;width:420px;max-width:92vw;background:linear-gradient(160deg,#132341,#0e1a30);border:1px solid rgba(201,162,75,.35);border-radius:22px;padding:38px 34px;box-shadow:0 30px 80px rgba(0,0,0,.55);animation:riseIn .6s ease}
+.login-logo{width:86px;height:86px;margin:0 auto 14px;border-radius:50%;background:linear-gradient(145deg,var(--gold),#a37f31);display:flex;align-items:center;justify-content:center;font-size:38px;font-weight:900;color:#0a1120;box-shadow:0 0 0 6px rgba(201,162,75,.15),0 10px 30px rgba(0,0,0,.4)}
+.login-card h1{text-align:center;color:var(--gold-bright);font-size:26px;font-weight:900;letter-spacing:1px}
+.login-card .sub{text-align:center;color:#9db1d3;font-size:13px;margin:6px 0 24px}
+.login-card input{background:rgba(255,255,255,.06);border-color:rgba(201,162,75,.25);color:#fff;margin-bottom:14px}
+.login-card input::placeholder{color:#7e93b8}
+.login-card input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,162,75,.2)}
+.btn-gold{width:100%;padding:12px;border:none;border-radius:11px;background:linear-gradient(135deg,var(--gold-bright),var(--gold));color:#0a1120;font-weight:800;font-size:15px;transition:.2s}
+.btn-gold:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.login-hint{margin-top:18px;background:rgba(201,162,75,.08);border:1px dashed rgba(201,162,75,.4);border-radius:10px;padding:10px 12px;color:#c8d4ea;font-size:12px}
+.login-hint b{color:var(--gold-bright)}
+#loginError{color:#fca5a5;font-size:12.5px;margin-top:10px;text-align:center;min-height:18px}
+
+/* ============ APP SHELL ============ */
+#app{display:none}
+.topbar{position:fixed;top:0;right:0;left:0;height:60px;background:linear-gradient(90deg,var(--navy-800),var(--navy-600));display:flex;align-items:center;gap:14px;padding:0 18px;z-index:100;box-shadow:0 2px 14px rgba(0,0,0,.25)}
+.brand{display:flex;align-items:center;gap:10px;color:#fff;font-weight:900;font-size:18px}
+.brand .blogo{width:38px;height:38px;border-radius:50%;background:linear-gradient(145deg,var(--gold),#a37f31);display:flex;align-items:center;justify-content:center;color:#0a1120;font-weight:900;font-size:17px;box-shadow:0 0 0 3px rgba(201,162,75,.2)}
+.brand small{display:block;color:var(--gold-bright);font-size:10.5px;font-weight:600;letter-spacing:.5px}
+.topbar .spacer{flex:1}
+.clock{color:#c8d4ea;font-size:12.5px;background:rgba(255,255,255,.06);padding:5px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.08)}
+.userchip{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);padding:5px 12px 5px 8px;border-radius:30px;color:#fff}
+.avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--gold-bright),var(--gold-dim));display:flex;align-items:center;justify-content:center;font-weight:800;color:#0a1120;font-size:13px}
+.userchip .uname{font-size:13px;font-weight:700;line-height:1.2}
+.userchip .urole{font-size:10.5px;color:var(--gold-bright)}
+.btn-logout{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);color:#fca5a5;border-radius:9px;padding:7px 12px;font-size:12.5px;font-weight:700}
+.btn-logout:hover{background:rgba(239,68,68,.3)}
+
+.sidebar{position:fixed;top:60px;right:0;bottom:0;width:var(--sidebar-w);background:linear-gradient(180deg,var(--navy-900),var(--navy-800));padding:14px 10px;overflow-y:auto;z-index:90;border-left:1px solid rgba(201,162,75,.15)}
+.nav-sec{color:#6e82a8;font-size:10.5px;font-weight:800;letter-spacing:1px;margin:16px 8px 6px}
+.nav-item{display:flex;align-items:center;gap:11px;width:100%;background:transparent;border:none;color:#c3cfe6;padding:10px 13px;border-radius:11px;font-size:13.8px;font-weight:600;text-align:right;margin-bottom:2px;transition:.18s;position:relative}
+.nav-item .ic{width:30px;height:30px;border-radius:9px;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.nav-item:hover{background:rgba(201,162,75,.12);color:#fff}
+.nav-item.active{background:linear-gradient(90deg,rgba(201,162,75,.22),rgba(201,162,75,.06));color:var(--gold-bright);font-weight:800}
+.nav-item.active .ic{background:rgba(201,162,75,.25)}
+.nav-item .badge-n{margin-right:auto;background:var(--red);color:#fff;font-size:10px;font-weight:800;border-radius:20px;padding:1px 8px}
+
+.main{margin:60px 0 0 var(--sidebar-w);padding:22px;min-height:calc(100vh - 60px)}
+.page-head{display:flex;align-items:center;gap:14px;margin-bottom:18px;flex-wrap:wrap}
+.page-head h2{font-size:21px;font-weight:900;color:var(--navy-800)}
+.page-head h2::before{content:"";display:inline-block;width:5px;height:22px;background:linear-gradient(180deg,var(--gold-bright),var(--gold));border-radius:4px;margin-left:10px;vertical-align:-3px}
+.page-head .desc{width:100%;color:var(--muted);font-size:13px}
+.page-head .actions{margin-right:auto;display:flex;gap:8px}
+
+/* ============ COMPONENTS ============ */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-bottom:16px}
+.card h3{font-size:15.5px;font-weight:800;color:var(--navy-800);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.card h3 .dot{width:9px;height:9px;border-radius:50%;background:var(--gold)}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(2,1fr)} .g3{grid-template-columns:repeat(3,1fr)} .g4{grid-template-columns:repeat(4,1fr)}
+.g5{grid-template-columns:repeat(5,1fr)}
+@media(max-width:1100px){.g4,.g5{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:720px){.g2,.g3,.g4,.g5{grid-template-columns:1fr}.sidebar{display:none}.main{margin-right:0}}
+
+.kpi{position:relative;border-radius:var(--radius);padding:16px 18px;color:#fff;overflow:hidden;box-shadow:var(--shadow)}
+.kpi .k-icon{position:absolute;left:-6px;top:-6px;font-size:64px;opacity:.14}
+.kpi .k-label{font-size:12.5px;opacity:.85;font-weight:600}
+.kpi .k-val{font-size:26px;font-weight:900;margin-top:2px}
+.kpi .k-sub{font-size:11px;opacity:.75;margin-top:3px}
+.kpi.navy{background:linear-gradient(135deg,#1a2f56,#0e1a30)}
+.kpi.gold{background:linear-gradient(135deg,#b8923c,#8a6d2f)}
+.kpi.green{background:linear-gradient(135deg,#16a34a,#15803d)}
+.kpi.red{background:linear-gradient(135deg,#dc2626,#991b1b)}
+.kpi.blue{background:linear-gradient(135deg,#2563eb,#1d4ed8)}
+.kpi.purple{background:linear-gradient(135deg,#9333ea,#7e22ce)}
+.kpi.teal{background:linear-gradient(135deg,#0d9488,#0f766e)}
+.kpi.amber{background:linear-gradient(135deg,#d97706,#b45309)}
+
+.btn{display:inline-flex;align-items:center;gap:7px;border:none;border-radius:10px;padding:9px 16px;font-size:13px;font-weight:700;transition:.18s;background:var(--navy-600);color:#fff}
+.btn:hover{filter:brightness(1.15);transform:translateY(-1px)}
+.btn.primary{background:linear-gradient(135deg,var(--gold-bright),var(--gold));color:#0a1120}
+.btn.ghost{background:#fff;border:1.5px solid var(--line);color:var(--navy-700)}
+.btn.ghost:hover{border-color:var(--gold);background:#fffdf5}
+.btn.danger{background:var(--red)}
+.btn.small{padding:5px 11px;font-size:12px;border-radius:8px}
+
+.badge{display:inline-block;padding:2px 11px;border-radius:20px;font-size:11px;font-weight:800}
+.b-green{background:#dcfce7;color:#15803d} .b-red{background:#fee2e2;color:#b91c1c} .b-amber{background:#fef3c7;color:#b45309}
+.b-blue{background:#dbeafe;color:#1d4ed8} .b-purple{background:#f3e8ff;color:#7e22ce} .b-gray{background:#eef1f5;color:#475467}
+.b-gold{background:#f6ecd2;color:#8a6d2f}
+
+table.tbl{width:100%;border-collapse:collapse;font-size:13px}
+table.tbl th{background:var(--navy-800);color:#e8dcb8;padding:10px 12px;text-align:right;font-size:12.3px;position:sticky;top:0;z-index:2}
+table.tbl th:first-child{border-radius:0 10px 0 0}
+table.tbl td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+table.tbl tr:hover td{background:#faf7ee}
+.tbl-wrap{overflow:auto;border-radius:12px;border:1px solid var(--line);max-height:70vh}
+.tbl-wrap.small{max-height:52vh}
+
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.tab{padding:8px 16px;border-radius:10px 10px 0 0;border:1.5px solid var(--line);border-bottom:none;background:#fff;font-weight:700;font-size:13px;color:var(--muted)}
+.tab.active{background:var(--navy-800);color:var(--gold-bright);border-color:var(--navy-800)}
+
+.modal-bg{position:fixed;inset:0;background:rgba(10,17,32,.62);z-index:500;display:flex;align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto;backdrop-filter:blur(3px)}
+.modal{background:#fff;border-radius:18px;width:760px;max-width:96vw;box-shadow:0 30px 90px rgba(0,0,0,.4);animation:riseIn .3s ease;margin-bottom:40px}
+.modal.wide{width:1000px}
+.modal-head{display:flex;align-items:center;background:linear-gradient(90deg,var(--navy-800),var(--navy-600));color:#fff;padding:14px 20px;border-radius:18px 18px 0 0}
+.modal-head h3{font-size:16px;font-weight:800;color:var(--gold-bright)}
+.modal-head button{margin-right:auto;background:rgba(255,255,255,.1);border:none;color:#fff;width:30px;height:30px;border-radius:8px;font-size:15px}
+.modal-body{padding:20px}
+.modal-foot{padding:14px 20px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-start}
+
+.toast-wrap{position:fixed;bottom:20px;left:20px;z-index:900;display:flex;flex-direction:column;gap:8px}
+.toast{background:var(--navy-800);color:#fff;padding:12px 18px;border-radius:11px;font-size:13px;font-weight:600;box-shadow:0 8px 30px rgba(0,0,0,.3);border-right:4px solid var(--gold);animation:riseIn .3s ease}
+.toast.ok{border-color:var(--green)} .toast.err{border-color:var(--red)}
+
+.field{margin-bottom:12px}
+.frow{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(max-width:640px){.frow{grid-template-columns:1fr}}
+
+/* checklist */
+.chk{display:flex;align-items:flex-start;gap:11px;padding:10px 12px;border:1px solid var(--line);border-radius:11px;margin-bottom:8px;background:#fff;transition:.2s}
+.chk:hover{border-color:var(--gold)}
+.chk input[type=checkbox]{width:19px;height:19px;accent-color:#b8923c;margin-top:3px;flex-shrink:0;cursor:pointer}
+.chk .chk-t{font-weight:700;font-size:13.2px}
+.chk.done{background:#f2fbf5;border-color:#bbe7c9}
+.chk.done .chk-t{text-decoration:line-through;color:#15803d}
+.chk .chk-meta{font-size:11.5px;color:var(--muted)}
+.progress{height:9px;background:#e9edf3;border-radius:20px;overflow:hidden}
+.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-bright));border-radius:20px;transition:width .4s}
+.progress-bar-wrap{display:flex;align-items:center;gap:10px;margin:8px 0}
+.progress-bar-wrap span{font-size:12px;font-weight:800;color:var(--navy-700)}
+
+/* stage timeline */
+.stages{display:flex;gap:0;overflow-x:auto;padding:6px 0 14px}
+.stage{min-width:150px;flex:1;position:relative;padding:12px 26px 12px 8px}
+.stage::before{content:"";position:absolute;top:24px;right:14px;left:-6px;height:3px;background:var(--line)}
+.stage:first-child::before{display:none}
+.stage .s-dot{width:34px;height:34px;border-radius:50%;background:#fff;border:3px solid var(--line);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;color:var(--muted);position:relative;z-index:2;margin-bottom:8px}
+.stage.active .s-dot{border-color:var(--gold);background:var(--navy-800);color:var(--gold-bright);box-shadow:0 0 0 5px rgba(201,162,75,.18)}
+.stage.done .s-dot{border-color:var(--green);background:var(--green);color:#fff}
+.stage .s-t{font-weight:800;font-size:12.3px;color:var(--navy-800)}
+.stage .s-d{font-size:10.8px;color:var(--muted)}
+
+/* accordion */
+.acc{border:1px solid var(--line);border-radius:12px;margin-bottom:10px;overflow:hidden;background:#fff}
+.acc-h{width:100%;text-align:right;background:#fff;border:none;padding:13px 16px;font-weight:800;font-size:14px;color:var(--navy-800);display:flex;align-items:center;gap:10px}
+.acc-h:hover{background:#faf7ef}
+.acc-h .chev{margin-right:auto;transition:.25s;color:var(--gold)}
+.acc.open .acc-h{background:linear-gradient(90deg,#faf5e8,#fff)}
+.acc.open .chev{transform:rotate(180deg)}
+.acc-b{max-height:0;overflow:hidden;transition:max-height .35s ease;padding:0 16px}
+.acc.open .acc-b{max-height:2600px;padding:0 16px 16px}
+
+.copy-box{position:relative;background:#f8f9fb;border:1px solid var(--line);border-radius:11px;padding:14px;font-size:13px;white-space:pre-wrap;line-height:1.9;max-height:420px;overflow-y:auto}
+.copy-btn{position:absolute;top:9px;left:9px}
+
+.alert{border-radius:11px;padding:12px 15px;font-size:13px;font-weight:600;margin-bottom:14px;border:1px solid}
+.alert.info{background:#eff6ff;border-color:#bfdbfe;color:#1e40af}
+.alert.warn{background:#fffbeb;border-color:#fde68a;color:#92400e}
+.alert.danger{background:#fef2f2;border-color:#fecaca;color:#991b1b}
+.alert.gold{background:#fdf8ec;border-color:#e8d5a0;color:#7c6124}
+
+.bank-card{border:1px solid var(--line);border-radius:14px;padding:15px;background:#fff;cursor:pointer;transition:.2s;position:relative}
+.bank-card:hover{border-color:var(--gold);box-shadow:0 8px 24px rgba(201,162,75,.15);transform:translateY(-2px)}
+.bank-card .bk-name{font-weight:900;font-size:14.5px;color:var(--navy-800)}
+.bank-card .bk-en{font-size:11px;color:var(--muted);direction:ltr;text-align:right}
+.bank-card .bk-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}
+
+.stat-line{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed var(--line);font-size:13px}
+.stat-line b{color:var(--navy-800)}
+.empty{padding:36px;text-align:center;color:var(--muted)}
+.empty .e-ic{font-size:42px;margin-bottom:8px;opacity:.5}
+
+/* chart */
+.bars{display:flex;align-items:flex-end;gap:14px;height:190px;padding:10px 4px 0}
+.bars .bar-w{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px}
+.bars .bar{width:70%;max-width:52px;background:linear-gradient(180deg,var(--gold-bright),var(--gold-dim));border-radius:7px 7px 0 0;min-height:4px;transition:height .6s;position:relative}
+.bars .bar span{position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:800;color:var(--navy-700)}
+.bars .bar-l{font-size:11px;color:var(--muted);font-weight:700;text-align:center}
+
+.donut-wrap{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.donut{width:160px;height:160px;border-radius:50%;position:relative;flex-shrink:0}
+.donut::after{content:"";position:absolute;inset:26px;background:#fff;border-radius:50%}
+.donut .d-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:2}
+.donut .d-center b{font-size:24px;font-weight:900;color:var(--navy-800)}
+.donut .d-center small{font-size:11px;color:var(--muted)}
+.legend{display:flex;flex-direction:column;gap:7px;font-size:12.5px}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-left:6px}
+
+.role-card{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff;transition:.2s}
+.role-card:hover{border-color:var(--gold)}
+.role-card .r-head{padding:14px 16px;color:#fff;display:flex;align-items:center;gap:12px}
+.role-card .r-head .r-ic{width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:21px}
+.role-card .r-head .r-t{font-weight:900;font-size:15px}
+.role-card .r-head .r-s{font-size:11px;opacity:.85}
+.role-card .r-body{padding:14px 16px}
+
+.searchbar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.searchbar input,.searchbar select{width:auto;min-width:180px;flex:1;max-width:320px}
+
+.task-row{display:flex;align-items:center;gap:10px;padding:9px 12px;border-bottom:1px solid var(--line)}
+.task-row:last-child{border-bottom:none}
+
+.law-item{border-right:4px solid var(--gold);background:#fbf9f3;border-radius:10px;padding:12px 15px;margin-bottom:10px}
+.law-item .l-t{font-weight:800;font-size:13.5px;color:var(--navy-800)}
+.law-item .l-d{font-size:12.5px;color:#4b5563;margin-top:4px}
+.law-item .l-tag{font-size:10.5px;background:var(--gold);color:#fff;border-radius:6px;padding:1px 8px;font-weight:700}
+
+.pill{display:inline-flex;align-items:center;gap:6px;background:#f2f4f8;border:1px solid var(--line);border-radius:20px;padding:4px 13px;font-size:12px;font-weight:700;color:var(--navy-700);cursor:pointer}
+.pill:hover{border-color:var(--gold);background:#fdf8ec}
+.pill.on{background:var(--navy-800);color:var(--gold-bright);border-color:var(--navy-800)}
+
+.template-card{border:1px solid var(--line);border-radius:13px;overflow:hidden;background:#fff;margin-bottom:13px}
+.template-card .t-head{display:flex;align-items:center;gap:10px;padding:11px 15px;background:linear-gradient(90deg,#faf5e8,#fff);border-bottom:1px solid var(--line)}
+.template-card .t-head b{font-size:13.8px;color:var(--navy-800)}
+.template-card .t-head .t-actions{margin-right:auto;display:flex;gap:6px}
+.template-card .t-body{padding:13px 15px;font-size:12.8px;max-height:240px;overflow:hidden;position:relative;white-space:pre-wrap;line-height:1.9;color:#374151}
+.template-card .t-body.open{max-height:none}
+.template-card .t-fade{position:absolute;bottom:0;left:0;right:0;height:50px;background:linear-gradient(transparent,#fff)}
+
+.perm-matrix td,.perm-matrix th{font-size:12px;text-align:center}
+.perm-matrix td:first-child{text-align:right;font-weight:700}
+.yes{color:var(--green);font-weight:900} .no{color:#cbd2dd;font-weight:900}
+
+@keyframes riseIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.fade-in{animation:riseIn .35s ease}
+.num{font-variant-numeric:tabular-nums;direction:ltr;display:inline-block}
+
+@media print{
+  .sidebar,.topbar,.no-print,.page-head .actions{display:none!important}
+  .main{margin:0;padding:0}
+  body{background:#fff}
+  .card{box-shadow:none;border:1px solid #ccc}
+}
+</style>
+</head>
+<body>
+<!-- ================= LOGIN ================= -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">ن</div>
+    <h1>النصر</h1>
+    <div class="sub">نظام إدارة مكتب المحاماة والدعاوى البنكية — دبي</div>
+    <input id="loginUser" placeholder="اسم المستخدم" autocomplete="off">
+    <input id="loginPass" type="password" placeholder="كلمة المرور" autocomplete="off">
+    <button class="btn-gold" onclick="doLogin()">تسجيل الدخول</button>
+    <div id="loginError"></div>
+    <div class="login-hint">
+      🔐 الدخول مقصور على موظفي المكتب — تصدر بيانات الحسابات من مدير النظام (المستشار عبدالرحمن نصر).
+      <br>وصول الصفحة نفسه محمي بمصادقة الخادم (Supabase) — غيّر كلمات المرور دوريًا من قسم الإدارة.
+    </div>
+  </div>
+</div>
+
+<!-- ================= APP ================= -->
+<div id="app">
+  <div class="topbar">
+    <div class="brand"><div class="blogo">ن</div><div>النصر<small>مكتب المحاماة — دعاوى البنوك والائتمان</small></div></div>
+    <div class="spacer"></div>
+    <div class="clock" id="clock"></div>
+    <div class="userchip"><div class="avatar" id="uAvatar">ن</div><div><div class="uname" id="uName"></div><div class="urole" id="uRole"></div></div></div>
+    <button class="btn-logout" onclick="logout()">خروج</button>
+  </div>
+
+  <div class="sidebar" id="sidebar"></div>
+  <div class="main" id="main"></div>
+</div>
+
+<div id="modalRoot"></div>
+<div class="toast-wrap" id="toastRoot"></div>
+
+<script>
+/* ============================================================
+   النصر ERP — قاعدة بيانات البنوك الإماراتية
+   ملاحظة: بيانات التواصل إرشادية مبنية على المصادر العامة،
+   يجب التحقق من الموقع الرسمي للبنك قبل الإرسال الفعلي.
+============================================================ */
+const BANKS = [
+ {id:"enbd", ar:"بنك الإمارات دبي الوطني", en:"Emirates NBD", type:"محلي", hq:"دبي", phone:"600 54 0000", email:"contactus@emiratesnbd.com", esc:"customer.care@emiratesnbd.com", site:"emiratesnbd.com", issues:["fees","interest","harass","insur","deduct","aecb"], note:"أكبر بنك في دبي — لديه وحدة شكاوى داخلية وسلطة تسوية بحدود معينة. يُبدأ بشكوى داخلية عبر القنوات الرسمية ثم سندك."},
+ {id:"emislamic", ar:"الإمارات الإسلامية", en:"Emirates Islamic", type:"محلي إسلامي", hq:"دبي", phone:"600 59 9999", email:"contact@emiratesislamic.ae", esc:"customer.care@emiratesislamic.ae", site:"emiratesislamic.ae", issues:["fees","interest","harass","insur"], note:"بنك إسلامي — المخالفات تُقيَّم وفق أعراف التمويل الإسلامي أيضًا (عدم جواز الرسوم المتضخمة)."},
+ {id:"mashreq", ar:"مشرق", en:"Mashreq Bank", type:"محلي", hq:"دبي", phone:"04 424 4444", email:"direct@mashreq.com", esc:"customerfeedback@mashreq.com", site:"mashreq.com", issues:["fees","interest","harass","thirdparty","deduct"], note:"يستخدم مكاتب تحصيل خارجية بكثافة — راقب مخالفة التحرش من طرف ثالث."},
+ {id:"dib", ar:"بنك دبي الإسلامي", en:"Dubai Islamic Bank", type:"محلي إسلامي", hq:"دبي", phone:"04 609 2222", email:"dib@dib.ae", esc:"complaints@dib.ae", site:"dib.ae", issues:["fees","insur","harass","interest"], note:"ضُمَّ إليه بنك نور (Noor Bank)."},
+ {id:"fab", ar:"بنك أبوظبي الأول", en:"First Abu Dhabi Bank (FAB)", type:"محلي", hq:"أبوظبي", phone:"02 681 1511", email:"c.call@bankfab.com", esc:"escalations@bankfab.com", site:"bankfab.com", issues:["fees","interest","deduct","aecb","insur"], note:"أكبر بنك إماراتي بالأصول — إجراءات تسوية مركزية."},
+ {id:"adcb", ar:"بنك أبوظبي التجاري", en:"ADCB", type:"محلي", hq:"أبوظبي", phone:"600 50 2030", email:"contactcenter@adcb.com", esc:"complaints@adcb.com", site:"adcb.com", issues:["fees","interest","harass","deduct"], note:"ضُمَّ إليه بنك الاتحاد الوطني UNB وبركة مسقط البنكية."},
+ {id:"adib", ar:"بنك أبوظبي الإسلامي", en:"ADIB", type:"محلي إسلامي", hq:"أبوظبي", phone:"02 610 8000", email:"contact@adib.ae", esc:"complaints@adib.ae", site:"adib.ae", issues:["fees","insur","harass"], note:"ضُمَّ إليه بنك الهلال (Al Hilal Bank)."},
+ {id:"rakbank", ar:"بنك رأس الخيمة الوطني", en:"RAKBANK", type:"محلي", hq:"رأس الخيمة", phone:"07 244 8800", email:"contactus@rakbank.ae", esc:"complaints@rakbank.ae", site:"rakbank.ae", issues:["fees","interest","thirdparty","harass"], note:"بطاقات ائتمانية بأعداد كبيرة للعاملين ذوي الدخل المتوسط."},
+ {id:"cbd", ar:"بنك دبي التجاري", en:"Commercial Bank of Dubai", type:"محلي", hq:"دبي", phone:"04 212 4400", email:"cbd@cbd.ae", esc:"complaints@cbd.ae", site:"cbd.ae", issues:["fees","interest","insur"]},
+ {id:"sib", ar:"بنك الشارقة الإسلامي", en:"Sharjah Islamic Bank", type:"محلي إسلامي", hq:"الشارقة", phone:"06 599 9999", email:"info@sib.ae", esc:"complaints@sib.ae", site:"sib.ae", issues:["fees","harass","insur"]},
+ {id:"ajman", ar:"بنك عجمان", en:"Ajman Bank", type:"محلي إسلامي", hq:"عجمان", phone:"04 319 5999", email:"info@ajmanbank.ae", esc:"complaints@ajmanbank.ae", site:"ajmanbank.ae", issues:["fees","harass"]},
+ {id:"hsbc", ar:"بنك إتش إس بي سي", en:"HSBC UAE", type:"أجنبي", hq:"دبي", phone:"800 444 472", email:"general@hsbc.com", esc:"customer.relations@hsbc.com", site:"hsbc.ae", issues:["fees","interest","insur","aecb"], note:"بنك أجنبي — يخضع نفسه للائحة حماية المستهلك للمصرف المركزي."},
+ {id:"scb", ar:"بنك ستاندرد تشارترد", en:"Standard Chartered", type:"أجنبي", hq:"دبي", phone:"800 4111", email:"contact.us@sc.com", esc:"client.care@sc.com", site:"sc.com/ae", issues:["fees","interest","insur"]},
+ {id:"citi", ar:"بنك سيتي بنك", en:"Citibank UAE", type:"أجنبي", hq:"دبي", phone:"04 403 3333", email:"UAE.CitiService@citi.com", esc:"complaints@citi.com", site:"citi.com/uae", issues:["fees","interest","harass"], note:"نقل أعماله الاستهلاكية إلى الأهل (بشرية الامتياز) — راقب تغيّر الجهة المطالبة."},
+ {id:"nbf", ar:"بنك الفجيرة الوطني", en:"National Bank of Fujairah", type:"محلي", hq:"الفجيرة", phone:"09 222 1111", email:"info@nbf.ae", esc:"complaints@nbf.ae", site:"nbf.ae", issues:["fees","harass"]},
+ {id:"boa", ar:"بنك الشارقة", en:"Bank of Sharjah", type:"محلي", hq:"الشارقة", phone:"06 501 3333", email:"info@bankofsharjah.com", esc:"complaints@bankofsharjah.com", site:"bankofsharjah.com", issues:["fees"]},
+ {id:"invest", ar:"بنك إنفست", en:"Invest Bank", type:"محلي", hq:"الشارقة", phone:"06 501 1777", email:"info@investbank.ae", esc:"complaints@investbank.ae", site:"investbank.ae", issues:["fees","harass"]},
+ {id:"uab", ar:"البنك العربي المتحد", en:"United Arab Bank", type:"محلي", hq:"الشارقة", phone:"06 543 3333", email:"info@uab.ae", esc:"complaints@uab.ae", site:"uab.ae", issues:["fees","harass"]},
+ {id:"gib", ar:"بنك الخليج الدولي", en:"Gulf International Bank (GIB UAE)", type:"محلي", hq:"أبوظبي", phone:"02 404 8000", email:"info@gibinternational.com", esc:"complaints@gibinternational.com", site:"gibinternational.com", issues:["fees"]},
+ {id:"dohabank", ar:"بنك الدوحة الإمارات", en:"Doha Bank UAE", type:"أجنبي", hq:"دبي", phone:"04 446 6888", email:"uae@dohabank.com", esc:"complaints@dohabank.com", site:"dohabank.ae", issues:["fees","harass"]},
+ {id:"habib", ar:"بنك حبيب أونتاريو الإمارات", en:"Habib Bank AG Zurich", type:"أجنبي", hq:"دبي", phone:"04 352 8777", email:"info@habibbank.ae", esc:"complaints@habibbank.ae", site:"habibbank.ae", issues:["fees"]},
+ {id:"saderat", ar:"بنك صادرات إيران", en:"Bank Saderat", type:"أجنبي", hq:"دبي", phone:"04 381 8000", email:"info@bfs.ae", esc:"complaints@bfs.ae", site:"bfs.ae", issues:["fees"]},
+ {id:"wio", ar:"بنك وايو", en:"Wio Bank", type:"محلي رقمي", hq:"أبوظبي", phone:"600 566 946", email:"hello@wio.io", esc:"complaints@wio.io", site:"wio.io", issues:["fees","aecb"], note:"بنك رقمي مرخّص من المصرف المركزي."},
+ {id:"zand", ar:"بنك زند", en:"Zand Bank", type:"محلي رقمي", hq:"أبوظبي", phone:"04 551 0000", email:"support@zand.ae", esc:"complaints@zand.ae", site:"zand.ae", issues:["fees"]},
+ {id:"enbdislamic", ar:"الإمارات دبي الوطني الإسلامي", en:"Emirates NBD Islamic", type:"محلي إسلامي", hq:"دبي", phone:"600 54 0000", email:"contactus@emiratesnbd.com", esc:"customer.care@emiratesnbd.com", site:"emiratesnbd.com", issues:["fees","insur","harass"], note:"نافذة التمويل الإسلامي لبنك الإمارات دبي الوطني."},
+ {id:"aeccb", ar:"الغرفة المشتركة / هيئة التقييم الائتماني", en:"AECB (Al Etihad Credit Bureau)", type:"جهة اتحادية", hq:"أبوظبي", phone:"800 232 2332", email:"info@aecb.gov.ae", esc:"support@aecb.gov.ae", site:"aecb.gov.ae", issues:["aecb","wrongdata"], note:"جهة تقييم ائتماني — تُقدَّم إليها شكاوى تصحيح البيانات الخاطئة (تقرير ائتماني مخالف)."},
+ {id:"sanadak", ar:"سندك — وحدة أمين المظالم البنكية والتأمينية", en:"Sanadak", type:"جهة اتحادية", hq:"أبوظبي", phone:"600 522 252", email:"info@sanadak.ae", esc:"complaints@sanadak.ae", site:"sanadak.ae", issues:["escalation"], note:"الجهة المستقلة للفصل في شكاوى المستهلك ضد البنوك بعد استنفاد قنوات الشكوى البنكية (شُكِّلت بقرار المصرف المركزي وبدأت العمل 2024)."},
+ {id:"cbuae", ar:"مصرف الإمارات المركزي", en:"Central Bank of the UAE", type:"الجهة الرقابية", hq:"أبوظبي", phone:"02 695 2222", email:"complaints@centralbank.ae", esc:"consumerprotection@centralbank.ae", site:"cbuae.gov.ae", issues:["escalation"], note:"للإفصاح والرقابة والإبلاغ عن مخالفات البنوك؛ الشكاوى الفردية تُوجَّه أولاً عبر سندك."}
+];
+
+/* ============ المخالفات والجزاءات — الجدول الرئيسي ============ */
+const VIOLATIONS = [
+ {code:"V01", title:"فوائد ورسوم غير معلنة أو تجاوز السقف المتفق عليه", desc:"تطبيق فوائد/رسوم غير منصوص عليها في عقد البطاقة أو أعلى من المعلن والمصرّح به لدى المصرف المركزي.", legal:"المرسوم بقانون اتحادي 14/2018 + لائحة/معايير حماية المستهلك (قرار مجلس إدارة المصرف المركزي 17/2019)", action:"مطالبة بإلغاء الرسوم الزائدة وإعادة حساب الرصيد + اعتراض كتابي ثم شكوى سندك", penalty:"تصحيح المخالفة + غرامة إدارية تصل إلى 1,000,000 درهم لكل مخالفة ومضاعفتها عند التكرار", days:"—"},
+ {code:"V02", title:"رسوم تأخير مفرطة أو تكرار تحميلها شهريًا على الرصيد نفسه", desc:"تحميل رسوم تأخير تتجاوز الحدود المعلنة أو تراكمها على الرصيد المتأخر بشكل مضاعف.", legal:"معايير حماية المستهلك — الشفافية في الرسوم", action:"طلب كشف حساب مفصل + اعتراض على كل رسوم تأخير زائدة", penalty:"غرامة إدارية + إلزام بإعادة الرسوم المحصلة", days:"—"},
+ {code:"V03", title:"خصومات غير مصرّح بها من الحساب", desc:"خصم مبالغ من حساب العميل دون تفويض صريح أو بدون إشعار مسبق.", legal:"لائحة حماية المستهلك + أحكام القانون المدني (عدم جواز الخصم دون إذن)", action:"طلب استرداد المبالغ المخصومة فورًا + حجز كشوف الحساب كدليل", penalty:"رد المبالغ + تعويض عن الضرر عند التقاضي", days:"—"},
+ {code:"V04", title:"التأمين على البطاقة/الحساب دون موافقة صريحة", desc:"إضافة وثيقة تأمين مدفوعة الأجر دون طلب أو موافقة موثقة من العميل.", legal:"معايير حماية المستهلك + قرارات المصرف المركزي المتعلقة بتأمين المستهلك", action:"إلغاء الوثيقة واسترداد الأقساط المسحوبة", penalty:"رد الأقساط + غرامة إدارية", days:"—"},
+ {code:"V05", title:"التحرش بالاتصالات والتهديد (دون أمر قضائي)", desc:"مكالمات متكررة مضايقة، تهديد بحظر السفر أو التوقيف دون أمر قضائي، الاتصال بأصحاب العمل أو الأهل.", legal:"قانون العقوبات الاتحادي (التشهير والتهديد) + معايير حماية المستهلك في التعامل مع العملاء", action:"تسجيل المكالمات + إنذار قانوني للبنك + شكوى سندك + بلاغ شرطة عند التهديد", penalty:"غرامة + مسؤولية عن التعويض، وقد تصبح جزائية (تهديد/تشهير)", days:"—"},
+ {code:"V06", title:"التحصيل من طرف ثالث بأساليب مخالفة", desc:"استخدام مكاتب تحصيل خارجية تتصرف بأسلوب غير مهني أو مهدِّد.", legal:"معايير حماية المستهلك — مسؤولية البنك عن وكلائه", action:"توثيق كل تواصل + شكوى على البنك كمطالِب أساسي (مسؤول عن وكيله)", penalty:"مسؤولية البنك كاملة عن تصرفات وكيل التحصيل", days:"—"},
+ {code:"V07", title:"رفض تقديم كشف حساب مفصل أو إفصاح كامل", desc:"عدم تزويد العميل بكشف تفصيلي للفوائد والرسوم عند الطلب.", legal:"حق العميل في الإفصاح وفق لائحة حماية المستهلك", action:"طلب كتابي برسالة مسجلة — رفض البنك يُعد مخالفة قائمة", penalty:"غرامة إدارية + إلزام بالتزويد خلال مهلة محددة", days:"15 يوم عمل للرد"},
+ {code:"V08", title:"رفع سعر الفائدة دون إشعار مسبق", desc:"زيادة الفائدة أو الرسوم دون إشعار كتابي مسبق بالمدة المقررة (عادة لا يقل عن 60 يومًا).", legal:"الشفافية والإفصاح — معايير حماية المستهلك", action:"الاعتراض خلال مدة الإشعار + طلب التقيد بالسعر السابق حتى انتهاء المهلة", penalty:"إعادة احتساب الفائدة وفق السعر السابق + غرامة", days:"60 يومًا للإشعار"},
+ {code:"V09", title:"تسجيل بيانات خاطئة لدى هيئة التقييم الائتماني AECB", desc:"تسجيل متعثرات غير صحيحة أو مبالغ متضخمة أو ديون مسددة/خاضعة لتسوية.", legal:"نظام التقييم الائتماني — قواعد تصحيح البيانات", action:"شكوى للبنك أولاً ثم شكوى تصحيح مباشرة إلى AECB مع المستندات المؤيدة", penalty:"إلزام بتصحيح السجل خلال مهلة", days:"—"},
+ {code:"V10", title:"عدم الرد على الشكوى خلال المهلة النظامية", desc:"عدم الرد على شكوى العميل خلال 15 يوم عمل (وقابلة للتمديد 15 يومًا أخرى فقط مع إخطار).", legal:"لائحة معالجة الشكاوى — معايير حماية المستهلك", action:"بعد انتهاء المهلة يحق للعميل التصعيد المباشر إلى سندك", penalty:"غض البنك عن الحماية الإجرائية + قبول التصعيد الفوري", days:"15 يوم عمل (+15 عند الإخطار)"},
+ {code:"V11", title:"التهديد بإجراءات جنائية على دين مدني", desc:"تهديد العميل بقضايا جنائية (حبس/توقيف) بشأن شيكات مرتبطة بدين ائتماني تجاري.", legal:"المرسوم بقانون 50/2022 — تحويل مخالفة الشيك إلى مسار مدني/تنفيذي في الغالب", action:"إبلاغ العميل بحقه القانوني + توثيق التهديد للرد قانونيًا", penalty:"التهديد الكاذب يُعرّض البنك لمسؤولية تعويضية", days:"—"},
+ {code:"V12", title:"مطالبة بدَين متقادم قانونًا", desc:"المطالبة بعد انقضاء مدة التقادم (10 سنوات كقاعدة عامة في الالتزامات التعاقدية).", legal:"قانون المعاملات المدنية — أحكام التقادم", action:"الدفع بالتقادم + مقاطعة سريان التقادم عند وجود اعتراف/سداد جزئي موثق", penalty:"سقوط الحق في المطالبة قضائيًا", days:"10 سنوات (استثناءات قصيرة)"},
+ {code:"V13", title:"خصم من حساب العميل أثناء التفاوض على التسوية", desc:"الاستمرار في الخصم أو تجميد الحساب رغم الالتزام بجدول تسوية موقّع.", legal:"مبدأ حسن النية ووفاء الالتزام — القانون المدني", action:"خطاب رسمي بالوفاء بالتسوية + شكوى سندك عند الاستمرار", penalty:"إلزام بالاستمرار في التسوية ورد المبالغ المخصومة", days:"—"},
+ {code:"V14", title:"إصدار بطاقات إضافية أو خدمات مسبقة الدفع دون طلب", desc:"فتح بطاقات/حسابات إضافية دون طلب العميل أو تفويضه.", legal:"الإفصاح والموافقة المستنيرة — معايير حماية المستهلك", action:"إغلاق البطاقة + مطالبة بإلغاء كامل الرسوم المرتبطة", penalty:"غرامة + إغلاق إلزامي للبطاقة", days:"—"},
+ {code:"V15", title:"تحميل رسوم صرف/معاملات غير مبررة", desc:"رسوم متكررة غير واضحة (رسوم استعلام، تحويل، صرف عملات، رسوم إدارية).", legal:"الشفافية الكاملة في الرسوم — لائحة حماية المستهلك", action:"طلب تفسير كتابي لكل رسوم + مطالبة برد غير المبرر", penalty:"رد الرسوم غير المعلنة", days:"—"},
+ {code:"V16", title:"إفصاح بيانات العميل لطرف ثالث دون إذن", desc:"الكشف عن بيانات الحساب أو الديون لأصحاب العمل أو غيرهم دون موافقة.", legal:"السرية المصرفية — المرسوم بقانون 14/2018", action:"شكوى جوهرية على البنك + مطالبة بالتعويض عن الضرر", penalty:"مسؤولية تأديبية وتعويضية شديدة", days:"—"},
+ {code:"V17", title:"مطالبة ورثة بما يزيد على تركة المتوفى", desc:"مطالبة الورثة بمبالغ تجاوز صافي التركة أو تسجيل ديون المتوفى ضد الورثة دون سند.", legal:"قانون المعاملات المدنية + قواعد التركة", action:"فصل التركة قانونيًا + مطالبة بإلغاء أي مطالبة خارج نطاق التركة", penalty:"سقوط المطالبة + تعويض", days:"—"},
+ {code:"V18", title:"إجراءات تحصيل قسرية دون سند قضائي", desc:"حجز أو خصم أو تجميد دون حكم أو أمر قضائي/إداري مخول.", legal:"المرسوم بقانون 38/2022 (الالتزامات المدنية والتجارية)", action:"اعتراض فوري + شكوى سندك + دعوى تعويض", penalty:"رد المبالغ + تعويض كامل عن الضرر", days:"—"},
+ {code:"V19", title:"إفصاح ناقص عن شروط عقد البطاقة", desc:"عدم تزويد العميل بنسخة من العقد أو جدول الرسوم قبل الإصدار أو بعد التعديل.", legal:"الإفصاح المستنير — معايير حماية المستهلك", action:"طلب كتابي بنسخة العقد + الاستناد للنقص عند النزاع", penalty:"غرامة + سقوط حق البنك في بعض الشروط غير المعلنة", days:"—"},
+ {code:"V20", title:"تضخيم الديون عبر تراكم فوائد مركبة غير متوازن", desc:"احتساب فوائد على فوائد (مركبة) بشكل مخالف للشروط أو غير موثق.", legal:"القانون المدني — الالتزام بأنواعه + معايير الرسوم", action:"طلب احتساب مستقل: أصل + فائدة بسيطة + رسوم منفصلة", penalty:"إعادة احتساب قضائية أو سندك للرصيد", days:"—"}
+];
+/* ============ القوانين المرجعية ============ */
+const LAWS = [
+ {t:"المرسوم بقانون اتحادي رقم (14) لسنة 2018 بشأن المؤسسات المالية والأنشطة الائتمانية", tag:"القانون الإطار", d:"القانون الأم لتنظيم البنوك وشركات التمويل في الدولة، ويحدد صلاحيات المصرف المركزي في الرقابة وفرض الجزاءات على المخالفين، ويحكم العلاقة بين البنك والعميل."},
+ {t:"قرار مجلس إدارة المصرف المركزي رقم (17/2019) — لائحة ومعايير حماية المستهلك للمؤسسات المالية", tag:"الأساس في النزاعات", d:"المرجع الأول في نزاعات بطاقات الائتمان: الشفافية في الرسوم والفوائد، حق العميل في الإفصاح، مهل الرد على الشكاوى، حظر الممارسات المضللة، والجزاءات الإدارية على البنوك المخالفة."},
+ {t:"قانون المعاملات المدنية الاتحادي رقم (5) لسنة 1985 وتعديلاته", tag:"القانون المدني", d:"أحكام الالتزامات والعقود والضرر والفوائد والتعويض، وأحكام التقادم (10 سنوات كقاعدة عامة للالتزامات التعاقدية)، وأحكام التركة والورثة."},
+ {t:"قانون المعاملات التجارية الاتحادي رقم (18) لسنة 1993 وتعديلاته", tag:"الشيكات والتجارة", d:"أحكام الشيكات التجارية وتداولها قبل تعديل 2022."},
+ {t:"المرسوم بقانون اتحادي رقم (50) لسنة 2022", tag:"تعديل جوهري — الشيكات", d:"حوّل معالجة الشيك المرتجع إلى مسار مدني/تنفيذي مباشر في معظم الحالات بدلًا من المسار الجنائي؛ أساس الرد القانوني على التهديد بقضايا جنائية بشأن شيكات التأمين البنكية."},
+ {t:"المرسوم بقانون اتحادي رقم (38) لسنة 2022 بشأن الالتزامات المدنية والتجارية", tag:"قانون التنفيذ", d:"إجراءات التنفيذ الجبري: أصول المطالبة، الحجز، منع السفر، طلبات التنفيذ أمام محكمة دبي وغرف التنفيذ."},
+ {t:"قانون حماية المستهلك الاتحادي رقم (15) لسنة 2020 ولائحته التنفيذية", tag:"حماية المستهلك", d:"حماية عامة للمستهلك من الممارسات الخادعة، وتطبيقه على القطاع المصرفي يتم أساسًا عبر لائحة 17/2019 للمصرف المركزي."},
+ {t:"قانون المرافعات الاتحادي رقم (42) لسنة 2022", tag:"إجراءات التقاضي", d:"قواعد رفع الدعاوى والجلسات والطعون أمام محاكم الدولة وفقًا للخصوصيات المحلية لمحاكم دبي."},
+ {t:"قانون الإثبات في المعاملات المدنية والتجارية", tag:"الإثبات", d:"قوة الإثبات للكشوف والمستندات والمراسلات الإلكترونية — أساس حفظ الأدلة في نزاعات البنوك."},
+ {t:"قرارات المصرف المركزي الخاصة بالتأمين على المستهلك", tag:"التأمين المصرفي", d:"تنظم بيع وثائق التأمين المرتبطة بالبطاقات والحسابات وتحظر بيعها دون موافقة موثقة — أساس مخالفة V04."},
+ {t:"قواعد هيئة التقييم الائتماني الموحد (AECB)", tag:"السجل الائتماني", d:"تنظم جمع بيانات التعرض الائتماني وحق المستهلك في طلب تصحيح البيانات الخاطئة."},
+ {t:"القرارات المنظمة لشكاوى المستهلك وسندك (وحدة أمين المظالم البنكية والتأمينية)", tag:"مسار التصعيد", d:"تُستنفد قنوات الشكوى البنكية الداخلية (رد خلال 15 يوم عمل) ثم يُقدَّم التصعيد إلى سندك مجانًا، ويبقى حق التقاضي أمام القضاء محفوظًا."}
+];
+/* ============ نماذج الإيميلات والردود ============ */
+const TEMPLATES = [
+ {id:"T01", cat:"اعتراض", title:"اعتراض على فاتورة/رسوم غير صحيحة", to:"[بريد خدمة العملاء بالبنك]", subject:"اعتراض على الرسوم والفوائد المحملة على بطاقة ائتمانية رقم [آخر 4 أرقام]",
+  body:"السادة البنك الموقر — [اسم البنك]\nالموضوع: اعتراض رسمي على الرسوم والفوائد المحملة على البطاقة المنتهية بـ [آخر 4 أرقام] — [اسم صاحب البطاقة]\n\nتحية طيبة وبعد،\n\nبالإشارة إلى حسابي/بطاقتي الائتمانية المشار إليها أعلاه، أود تقديم اعتراضي الرسمي على الرسوم والفوائد التالية:\n1. رسوم بقيمة [المبلغ] درهم بتاريخ [التاريخ] — غير متفق عليها في العقد.\n2. فوائد بقيمة [المبلغ] درهم — محسوبة فوق السعر المعلن.\n3. [أي رسوم أخرى].\n\nأرفق نسخًا من كشف الحساب والعقد و[المستندات].\n\nأطلب ما يلي:\n- إلغاء الرسوم الزائدة وإعادة احتساب الرصيد وفق العقد.\n- تزويدي بكشف حساب تفصيلي لكل الرسوم والفوائد من تاريخ الإصدار.\n- الرد كتابيًا خلال المهلة النظامية (15 يوم عمل) وفق معايير حماية المستهلك للمصرف المركزي.\n\nأُنبه إلى أن عدم المعالجة سيتيح لي التصعيد إلى سندك (وحدة أمين المظالم) واتخاذ الإجراءات القانونية.\n\nوتفضلوا بقبول فائق الاحترام،\n[اسم العميل]\nرقم الاتصال: [الهاتف] | تاريخ: [التاريخ]\nالمرفقات: [قائمة المرفقات]"},
+ {id:"T02", cat:"تسوية", title:"طلب تسوية وتصفية الدين بمبلغ مخفض", to:"[بريد التسويات بالبنك]", subject:"طلب تسوية وتصفية نهائية للدين — [اسم العميل] — البطاقة [آخر 4 أرقام]",
+  body:"السادة البنك الموقر — [اسم البنك]\nالموضوع: طلب تسوية وتصفية نهائية — [اسم العميل] — البطاقة المنتهية بـ [آخر 4 أرقام]\n\nتحية طيبة وبعد،\n\nأشير إلى تعثري في سداد الالتزامات تجاه البنك نتيجة [سبب: فقدان الوظيفة / تقاعد / انخفاض الدخل / ظرف طارئ]، وأوثق ذلك بالمرفقات [إثبات إنهاء الخدمة/قرار المعاش/إثبات الدخل الحالي].\n\nأرغب في تصفية هذا الالتزام نهائيًا ومسؤوليةً من جانبي، وأعرض التسوية التالية:\n- الرصيد الحالي المعلن: [المبلغ] درهم.\n- مبلغ التصفية المقترح (دفعة واحدة): [مبلغ التسوية] درهم.\n- أو على [عدد] دفعات شهرية بقيمة [المبلغ] درهم، سدَّد وفق جدول مرفق.\n\nعند الموافقة أطلب:\n1. خطابًا موقّعًا من البنك يحدد مبلغ التصفية النهائي وتاريخ السداد.\n2. تعهدًا بعدم توجيه أي مطالبة إضافية بعد السداد (تسوية وفتح).\n3. تحديث سجلات هيئة التقييم الائتماني AECB بعد السداد (إغلاق/تسوية).\n\nأنا جاهز لالتقاء حضراتكم أو وكيلي القانوني في أي موعد.\n\nوتفضلوا بقبول فائق الاحترام،\n[اسم العميل] — يُتصرف بالنيابة عنه: مكتب النصر للمحاماة — دبي\n[الهاتف]"},
+ {id:"T03", cat:"شكوى داخلية", title:"شكوى بنكية رسمية داخلية (خطوة أولى قبل سندك)", to:"[بريد الشكاوى بالبنك]", subject:"شكوى رسمية — ممارسات مخالفة لمعايير حماية المستهلك — [اسم العميل]",
+  body:"السادة البنك الموقر — [اسم البنك]\nالموضوع: شكوى رسمية — مخالفة معايير حماية المستهلك للمصرف المركزي — [اسم العميل] — البطاقة [آخر 4 أرقام]\n\nتحية طيبة وبعد،\n\nأقدّم هذه الشكوى الرسمية وفقًا للائحة ومعايير حماية المستهلك للمؤسسات المالية الصادرة بقرار مجلس إدارة المصرف المركزي رقم (17/2019)، بشأن الممارسات التالية:\n\n1. [وصف المخالفة الأولى بالتفصيل والتاريخ والمبلغ]\n2. [وصف المخالفة الثانية]\n3. [المضايقات/التحرش إن وُجدت مع التواريخ]\n\nالمرفقات: [كشوف الحساب، العقد، المراسلات السابقة، تسجيلات المكالمات إن وجدت].\n\nالمطلوب:\n- التحقيق في المخالفات وإيقافها فورًا.\n- إلغاء الرسوم/الفوائد المخالفة وإعادة احتساب الرصيد.\n- تعويض ما ترتب من ضرر [اختياري].\n- رد كتابي ومفصل خلال 15 يوم عمل كحد أقصى وفق المعايير المشار إليها.\n\nأنبه إلى أن انقضاء المهلة دون معالجة جوهرية يتيح لي التصعيد المجاني إلى سندك — وحدة أمين المظالم البنكية والتأمينية — واتخاذ كافة الإجراءات القانونية.\n\nوتفضلوا بقبول فائق الاحترام،\n[اسم العميل] — [الهاتف]\nعن طريق: مكتب النصر للمحاماة — دبي"},
+ {id:"T04", cat:"تصعيد", title:"شكوى تصعيد إلى سندك (وحدة أمين المظالم) بعد انتهاء مهلة البنك", to:"info@sanadak.ae", subject:"تصعيد شكوى بنكية — [اسم البنك] — [اسم العميل] — [رقم الشكوى البنكية]",
+  body:"حضرات وحدة أمين المظالم البنكية والتأمينية (سندك) المحترمين،\nالموضوع: تصعيد شكوى ضد [اسم البنك] — مقدم الشكوى: [اسم العميل]\n\nتحية طيبة وبعد،\n\nأقدّم شكواي ضد [اسم البنك] بشأن [وصف موجز للمخالفة والمبالغ]، وذلك بعد استنفاد قنوات الشكوى الداخلية للبنك كما يلي:\n- شكوى داخلية مقدَّمة بتاريخ [التاريخ] برقم [رقم الشكوى إن وُجد].\n- [رد البنك: غير جوهري / رفض / لم يرد خلال 15 يوم عمل المنتهية بتاريخ [التاريخ]].\n\nتفاصيل الشكوى:\n[تفصيل كامل: التواريخ، المبالغ، المخالفات، المرجع النظامي لكل مخالفة من معايير حماية المستهلك 17/2019]\n\nالتعويض/المعالجة المطلوبة:\n1. [إلغاء الرسوم الزائدة]\n2. [إعادة احتساب الرصيد]\n3. [تصحيح السجل الائتماني لدى AECB]\n\nالمرفقات: كشوف الحساب، العقد، الشكوى البنكية ورد البنك، المراسلات كاملة، [أي دليل آخر].\n\nأتحفظ بحقي في اللجوء إلى القضاء.\n\nوتفضلوا بقبول فائق الاحترام،\n[اسم العميل] — يُقدَّم عن طريق مكتب النصر للمحاماة — دبي\n[الهاتف] | [البريد الإلكتروني]"}
+];
+const TEMPLATES2 = [
+ {id:"T05", cat:"رد على إنذار", title:"رد على إنذار/إخطار قانوني من البنك أو محامي البنك", to:"[بريد محامي/البنك]", subject:"رد رسمي على الإنذار القانوني المورِّد بتاريخ [التاريخ] — [اسم العميل]",
+  body:"حضرات السادة المحترمين،\nالموضوع: رد على الإنذار القانوني المورِّد بتاريخ [التاريخ] وبخصوص [اسم العميل]\n\nتحية طيبة وبعد،\n\nبصفة الوكيل القانوني عن [اسم العميل]، وأشير إلى إنذاركم المشار إليه أعلاه، أرد ما يلي:\n\n1. [الدفعة الأولى: إنكار الوجاهة / الدفع بعدم السند / الدفع بالتقادم — وفق الحالة]\n2. [الدفعة الثانية: تفصيل الاعتراض على المبالغ — رسوم وفوائد مخالفة لمعايير حماية المستهلك للمصرف المركزي رقم 17/2019]\n3. [الدفعة الثالثة: عرض التسوية — سداد [المبلغ] ضمن [عدد] دفعات]\n\nيُنبه إلى أن الحقوق القانونية لعميلنا محفوظة كاملة، بما فيها الدفع بالتقادم، ومطالبته بالتعويض عن أي ضرر، والإبلاغ رسميًا عن أي ممارسات مخالفة إلى المصرف المركزي وسندك.\n\nوفي حال استمرار الطرح التفاوضي، فنحن جاهزون لجلسة تسوية موثقة.\n\nوتفضلوا بقبول فائق الاحترام،\nالمستشار [الاسم] — محامٍ مرخص أمام المحاكم الإماراتية\nمكتب النصر للمحاماة والاستشارات القانونية — دبي\n[هاتف المكتب] | [البريد]"},
+ {id:"T06", cat:"رد على إنذار", title:"رد على تهديد بدعوى جنائية بشأن شيك مرتبط بدين ائتماني", to:"[بريد البنك/محاميه]", subject:"رد على التهديد بإجراءات جنائية — دَين ائتماني تجاري — [اسم العميل]",
+  body:"حضرات السادة المحترمين،\nالموضوع: رد على التهديد بإجراءات جنائية — [اسم العميل]\n\nتحية طيبة وبعد،\n\nبالإشارة إلى تهديدكم بتوجيه إجراءات جنائية بشأن الشيك المقدم كضمان لالتزام ائتماني تجاري، ننبه إلى ما يلي:\n\n1. بموجب المرسوم بقانون اتحادي رقم (50) لسنة 2022، أصبح سداد الشيك مسارًا مدنيًا/تنفيذيًا في معظم الحالات، ولم يعد العجز عن السداد جريمة جنائية تلقائية.\n2. الشيك المذكور ضمان لالتزام تجاري ولا يمكن استخدامه وسيلة تهديد أو ضغط.\n3. أي استخدام للتهديد أو التضييق على حركة العميل دون سند قضائي سيتضمن ردًا قانونيًا كاملًا، ومن بين ذلك الشكوى إلى المصرف المركزي وسندك والمطالبة بالتعويض.\n\nنكرر عرضنا للتسوية الودية [التفاصيل]، ونحتفظ بكامل حقوق عميلنا.\n\nوتفضلوا بقبول فائق الاحترام،\nمكتب النصر للمحاماة — دبي"},
+ {id:"T07", cat:"شكوى تحرش", title:"شكوى تحرش ومضايقة اتصالات (تُرفع للبنك مع الإبلاغ الرقابي)", to:"[بريد الشكاوى بالبنك]", subject:"شكوى عاجلة — تحرش ومضايقات في التحصيل — إيقاف فوري مطلوب — [اسم العميل]",
+  body:"السادة البنك الموقر — [اسم البنك]\nالموضوع: شكوى عاجلة — مضايقات في التحصيل — [اسم العميل] — [التاريخ]\n\nتحية طيبة وبعد،\n\nأُعلمكم بأنني تعرضت للتحرش التالي من قبل من ينوب عنكم:\n- مكالمات متكررة بتاريخ [التواريخ] من الرقم [الرقم].\n- تهديدات: [نقل نصي حرفي للتهديد].\n- الاتصال بـ [صاحب العمل/الأهل] بمعلومات عن ديني — وهو كشف لمعلومات سرية بمخالفة للسرية المصرفية.\n\nيُنبه إلى أن هذه الممارسات تخالف معايير حماية المستهلك للمصرف المركزي، وتُعرِّض البنك للمسؤولية عن تعويض الضرر، وقد ترقى إلى فعل جنائي (تهديد/تشهير) وفق قانون العقوبات الاتحادي.\n\nالمطلوب:\n1. إيقاف المضايقات فورًا وتوجيه التحصيل حصريًا عبر القنوات الرسمية المكتوبة.\n2. التأكيد كتابيًا على عدم الاتصال بأي طرف ثالث بشأن حسابي.\n3. الرد خلال 15 يوم عمل.\n\nتسجيلات المكالمات والرسائل محفوظة لديّ.\n\nوتفضلوا بقبول فائق الاحترام،\n[اسم العميل] — عبر مكتب النصر للمحاماة"},
+ {id:"T08", cat:"تقسيط", title:"طلب إعادة جدولة الدين على أقساط شهرية (بدون تسوية مخفضة)", to:"[بريد خدمة العملاء بالبنك]", subject:"طلب إعادة جدولة الالتزام — خطة سداد — [اسم العميل] — [آخر 4 أرقام]",
+  body:"السادة البنك الموقر،\nالموضوع: طلب إعادة جدولة الالتزام — [اسم العميل]\n\nتحية طيبة وبعد،\n\nنظرًا لظروفي المالية الحالية [شرح موجز + مرفق الإثبات]، أطلب إعادة جدولة الرصيد القائم البالغ [المبلغ] درهم وفق الخطة التالية:\n- مدة الجدولة: [عدد] شهرًا.\n- القسط الشهري: [المبلغ] درهم.\n- تاريخ أول قسط: [التاريخ].\n\nأتعهد بالالتزام الصارم بالخطة عند موافقتكم، وأطلب توقف إجراءات التقاضي/التحصيل خلال فترة التفاوض.\n\nوتفضلوا بقبول فائق الاحترام،\n[اسم العميل] — [الهاتف]"}
+];
+const TEMPLATES3 = [
+ {id:"T09", cat:"تصحيح AECB", title:"شكوى تصحيح السجل الائتماني لدى هيئة التقييم الائتماني AECB", to:"info@aecb.gov.ae", subject:"طلب تصحيح بيانات ائتمانية خاطئة — [اسم العميل] — [رقم الهوية]",
+  body:"حضرات هيئة التقييم الائتماني الموحد المحترمين،\nالموضوع: طلب تصحيح بيانات ائتمانية — [اسم العميل] — [رقم الهوية]\n\nتحية طيبة وبعد،\n\nبعد الاطلاع على تقريري الائتماني، ألاحظ البيانات غير الصحيحة التالية:\n1. [الدين المسجل لدى [اسم البنك] — المسجل [المبلغ] والصحيح [المبلغ]].\n2. [دين مسدد/مستوطن ما زال يظهر كمتأخر].\n\nالمرفقات: تقرير AECB، كشوف الحساب البنكية، خطاب التسوية/السداد من البنك، [أي مستند مؤيد].\n\nأطلب تصحيح السجل وفق قواعد الهيئة، وإخطاري كتابيًا بالإجراء المتخذ.\n\nوتفضلوا بقبول فائق الاحترام،\n[اسم العميل] — [الهاتف] | عبر مكتب النصر للمحاماة"},
+ {id:"T10", cat:"متابعة", title:"متابعة شكوى سابقة لم يتم الرد عليها", to:"[بريد الشكاوى بالبنك]", subject:"متابعة — الشكوى رقم [الرقم] — لم يتم الرد خلال المهلة — [اسم العميل]",
+  body:"السادة البنك الموقر،\nالموضوع: متابعة الشكوى رقم [الرقم] — [اسم العميل]\n\nتحية طيبة وبعد،\n\nبإشارة إلى شكواي المقدمة بتاريخ [التاريخ] بخصوص [الموضوع]، لم يصلني رد حتى تاريخه رغم مرور [عدد] يوم عمل.\n\nأذكّر بأن معايير حماية المستهلك للمصرف المركزي توجب الرد خلال 15 يوم عمل كحد أقصى (وقابل للتمديد مرة واحدة فقط مع إخطاري كتابيًا).\n\nأطلب الرد الفوري، وإلا سأباشر التصعيد إلى سندك دون إشعار إضافي.\n\nوتفضلوا بقبول فائق الاحترام،\n[اسم العميل] — [الهاتف]"},
+ {id:"T11", cat:"تسوية", title:"خطاب اعتماد التسوية (يُطلب من البنك بعد الموافقة)", to:"[بريد التسويات بالبنك]", subject:"طلب خطاب اعتماد التسوية الموثق — [اسم العميل] — [آخر 4 أرقام]",
+  body:"السادة البنك الموقر،\nالموضوع: طلب خطاب اعتماد التسوية — [اسم العميل]\n\nتحية طيبة وبعد،\n\nبإشارة إلى اتفاق التسوية المعلَّق بين الطرفين بشأن الرصيد البالغ [المبلغ] درهم والمحدد بـ [مبلغ التسوية] درهم، أطلب تزويدي خطابًا رسميًا موقَّعًا يتضمن:\n\n1. مبلغ التصفية النهائي وتاريخ/طريقة السداد.\n2. تنصًّا صريحًا على أن السداد يصفّي كامل الالتزام (تسوية وفتح).\n3. تعهد بإغلاق/تحديث الحالة لدى AECB بعد السداد.\n4. عدم اللجوء لأي إجراء تقاضي أو تحصيل بعد الوفاء.\n\nسُيُسدَّد المبلغ وفق الخطاب المعتمد خلال [عدد] يومًا من استلامه.\n\nوتفضلوا بقبول فائق الاحترام،\nمكتب النصر للمحاماة — دبي"},
+ {id:"T12", cat:"إغلاق", title:"خطاب إقفال الملف والتحرر (يُرسل للبنك بعد السداد النهائي)", to:"[بريد خدمة العملاء بالبنك]", subject:"إقفال نهائي — تسوية مكتملة — طلب خطاب تصفية وتحديث AECB — [اسم العميل]",
+  body:"السادة البنك الموقر،\nالموضوع: إقفال نهائي — [اسم العميل] — البطاقة [آخر 4 أرقام]\n\nتحية طيبة وبعد،\n\nنبلاغكم بأن كامل مبلغ التسوية المتفق عليه ([المبلغ] درهم) قد سُدِّد بتاريخ [التاريخ] عن طريق [طريقة السداد]، برقم إيصال [الرقم].\n\nأطلب:\n1. خطاب إقفال/تصفية رسمي خلال [عدد] يومًا.\n2. إغلاق الحساب/البطاقة نهائيًا.\n3. تحديث بيانات هيئة التقييم الائتماني AECB خلال المدة المقررة.\n4. تأكيد كتابي بعدم وجود أي التزام متبقٍ.\n\nوتفضلوا بقبول فائق الاحترام،\nمكتب النصر للمحاماة — دبي"}
+];
+/* ============ حالات العملاء — دليل شامل ============ */
+const CASE_TYPES = [
+ {id:"CT01", t:"موظف فقد وظيفته حديثًا (تسريح/إنهاء)", success:"مرتفعة", urgency:"عاجلة",
+  desc:"عميل كان يسدد بانتظام وتوقف بسبب إنهاء الخدمة أو التسريح. البنوك عادة تقبل التفاوض على إعادة جدولة أو تسوية، والوقت حاسم قبل تراكم التأخير.",
+  docs:["إثبات إنهاء الخدمة (خطاب إنهاء/شهادة إنهاء مكاتب العمل)","آخر كشف حساب للبطاقة","إثبات الراتب السابق","تقرير AECB","هوية الإمارات وصورة جواز السفر","كشف تراكم الرسوم والفوائد"],
+  steps:["تسجيل بيانات العميل فورًا في النظام (استقبال)","طلب إثبات إنهاء الخدمة وجميع كشوف الحساب","تحليل تراكم الفوائد والرسوم (محاسب: حاسبة المديونية)","إعداد خطة تفاوض: إعادة جدولة أولًا ثم تسوية","إرسال طلب إعادة الجدولة (T08) خلال 48 ساعة من فتح الملف","متابعة رد البنك بعد 7 أيام (T10) إن لم يرد","عند الموافقة: خطاب اعتماد التسوية/الجدولة (T11) وتوثيقه","متابعة السداد الدوري وتحديث AECB بعد الإقفال (T12)"],
+  assign:"استقبال: التسجيل — إداري: المستندات — محاسب: الحساب — باحث: الخطة — المستشار: الاعتماد والتفاوض النهائي",
+  note:"كل يوم تأخير يزيد الرسوم؛ التفاوض المبكر يحقق أفضل النتائج. لا توقَّع أي شيء قبل مراجعة المستشار."},
+ {id:"CT02", t:"متقاعد بدخل محدود", success:"مرتفعة", urgency:"متوسطة",
+  desc:"متقاعد بعدد بطاقات أو دَين واحد لا يتناسب مع معاشه. البنك يميل للتسوية أو الجدولة طويلة الأجل مع إثبات المعاش.",
+  docs:["قرار المعاش/إيصال صرف المعاش","كشوف الحساب (معاش + بطاقة)","تقرير AECB","هوية الإمارات"],
+  steps:["تسجيل العميل وجمع إثبات المعاش","حساب نسبة القسط الممكن من المعاش (يُفضل ≤ 30%)","تقديم طلب جدولة/تخفيض الفائدة مع إبراز وضع المعاش","التفاوض على تخفيض الرسوم المتأخرة","اعتماد الاتفاق كتابيًا ومتابعة الالتزام"],
+  assign:"استقبال: التسجيل — إداري: المستندات — محاسب: نسبة الدخل — المستشار: التفاوض",
+  note:"إذا كان البنك يخصم من حساب المعاش مباشرة دون إذن، فهي مخالفة V03 — تعالج فورًا."},
+ {id:"CT03", t:"نزاع رسوم وفوائد دون تخلف في السداد", success:"مرتفعة جدًا", urgency:"متوسطة",
+  desc:"عميل يسدد بانتظام لكن يجد رسومًا وفوائد غير مفهومة أو متضخمة. أسهل الحالات وأعلاها نجاحًا لوضوح الدليل.",
+  docs:["كشوف الحساب للأشهر المتنازع عليها","عقد البطاقة وجدول الرسوم المعلن","إثباتات السداد","مستندات المطالبة بالرسوم"],
+  steps:["طلب كشف تفصيلي للرسوم والفوائد (حق نظامي)","مقارنة كشف البنك بالعقد وجدول الرسوم المعلن","تحديد كل رسوم مخالفة (محاسب + باحث قانوني)","إرسال اعتراض تفصيلي (T01) بتحديد كل بند","إذا لم يرد خلال 15 يوم عمل: تصعيد سندك (T04)","استرداد الرسوم الزائدة"],
+  assign:"استقبال: التسجيل — إداري: المستندات — محاسب: التفصيل — باحث: السند القانوني — المستشار: الاعتماد",
+  note:"احتفظ بنسخة موثقة من كل كشف قبل الإرسال. عدم الرد = مخالفة V10."},
+ {id:"CT04", t:"تحرش بنكي ومضايقات تحصيل", success:"مرتفعة", urgency:"عاجلة جدًا",
+  desc:"مكالمات متكررة، تهديدات، اتصال بجهات العمل أو الأهل. مخالفة مزدوجة: معايير المستهلك + السرية المصرفية، وقد ترقى لجنائية.",
+  docs:["تسجيلات المكالمات","لقطات شاشة للرسائل","سجل التواريخ والأوقات والأرقام","بيان بأسماء الأشخاص الذين اتصل بهم البنك"],
+  steps:["توجيه العميل فورًا لحفظ كل دليل (تسجيل/لقطة شاشة)","إعداد سجل زمني للمضايقات (باحث قانوني)","إرسال شكوى التحرش (T07) مع طلب إيقاف فوري","التحقق من كشف البيانات لأطراف ثالثة (مخالفة V16) للتصعيد","شكوى سندك + بلاغ شرطة عند التهديد الصريح","مطالبة بالتعويض عن الضرر"],
+  assign:"استقبال: توجيه فوري — باحث: السجل الزمني — المستشار: الشكوى والرد القانوني",
+  note:"هذه الحالة تُحسم عادة سريعًا لأن البنك يخشى الرقابة. لا تتوقف إجراءات السداد الأصلية بسببها."},
+ {id:"CT05", t:"متوفى — التعامل مع الورثة والتركة", success:"متوسطة", urgency:"حساسة",
+  desc:"دين بطاقة ائتمانية على متوفى. الورثة لا يرثون الدين إلا في حدود التركة، وأي مطالبة تتجاوزها مخالفة (V17).",
+  docs:["شهادة الوفاة","الإفراج الشرعي/وثيقة الورثة","كشوف الحساب","عقد البطاقة","تقرير AECB"],
+  steps:["تسجيل ملف الورثة بسرية تامة وحساسية عالية","فصل التركة قانونيًا وتحديد صافي الأصول","الرد على أي مطالبة تتجاوز التركة (T05)","التفاوض على تسوية من أصول التركة فقط","إقفال الملف بخطاب تصفية رسمي"],
+  assign:"استقبال: التسجيل بحساسية — إداري: مستندات الورثة — باحث: التركة — المستشار: الإشراف المباشر",
+  note:"حساسية عالية — أي تواصل مع الورثة يكون بهدوء واحترام. التوثيق القانوني إلزامي في كل خطوة."}
+];
+const CASE_TYPES2 = [
+ {id:"CT06", t:"دين متقادم (تجاوز 10 سنوات)", success:"مرتفعة عند التوثيق", urgency:"حساسة",
+  desc:"دَين قديم عاد البنك لمطالبته بعد سنوات طويلة. الدفع بالتقادم أداة دفاع قوية إذا لم يكن هناك اعتراف أو سداد جزئي حديث.",
+  docs:["كشف الحساب الكامل التاريخي","تاريخ آخر سداد/اعتراف موثق","أي مراسلات قديمة","تقرير AECB التاريخي"],
+  steps:["تحديد تاريخ آخر سداد/اعتراف بدقة (يقطع سريان التقادم)","الدفاع بالتقادم (T05) مع الاحتفاظ بالدليل","عدم الاعتراف الشفهي أو الكتابي بأي مبلغ قبل مراجعة المستشار","عدم سداد أي مبلغ جزئي قبل اعتماد المسار","توثيق كل تواصل مع البنك"],
+  assign:"استقبال: التسجيل — باحث: تحليل التواريخ — المستشار: القرار والدفاع",
+  note:"تنبيه حاسم: أي سداد جزئي أو اعتراف موثق قد يقطع سريان التقادم — ممنوع أي تعهد قبل اعتماد المستشار."},
+ {id:"CT07", t:"استخدام احتيالي للبطاقة (سرقة/احتيال)", success:"مرتفعة إذا توثق فورًا", urgency:"عاجلة جدًا",
+  desc:"معاملات لم يجريها العميل (سرقة بطاقة/بيانات). يجب إبلاغ البنك فورًا خلال المدد القصيرة المقررة، وإلا قد يتحمل العميل المسؤولية.",
+  docs:["كشف المعاملات غير المعروفة","بلاغ شرطة","إقفال/حجب البطاقة فورًا (توثيق)","إثبات وجود العميل في مكان آخر وقت المعاملات"],
+  steps:["حجب البطاقة فورًا عبر خدمة العملاء (توثيق المكالمة)","بلاغ شرطة خلال 24 ساعة","شكوى بنكية مع تقرير الشرطة وكل الدلائل","التصعيد لسندك عند رفض البنك","متابعة رد المبالغ المحصلة دون وجه حق"],
+  assign:"استقبال: إجراءات الحجب فورًا — إداري: البلاغ — باحث: الشكوى — المستشار: التصعيد",
+  note:"السرعة تحسم النتيجة. التأخر قد يُحمّل العميل المسؤولية وفق شروط العقد."},
+ {id:"CT08", t:"عميل تحت حجز/منع سفر بدعوى قائمة", success:"حسب الملف", urgency:"عاجلة جدًا",
+  desc:"صدر حكم أو طلب تنفيذ ضد العميل وحُجز على حساباته أو مُنع من السفر. يحتاج إجراءً تنفيذيًا سريعًا من محامٍ مرخص.",
+  docs:["صحيفة الدعوى والحكم/الأمر","كشوف الحساب","إثباتات السداد السابقة","المستندات المؤيدة للتسوية"],
+  steps:["فحص الدعوى/الحكم فورًا (بحث قانوني)","تحديد وجود دفوع قانونية (اعتراض على المبلغ/التقادم/الفوائد المخالفة)","عرض تسوية على الطرف المطالب أو عبر التنفيذ","طلب رفع الحجز/المنع عند التسوية","متابعة تحديث AECB"],
+  assign:"باحث قانوني: الفحص — محاسب: التسوية — المستشار: المثول والتفاوض",
+  note:"حالة إجرائية سريعة — كل يوم تأخير يقيّد العميل أكثر. أولوية قصوى في الترتيب."},
+ {id:"CT09", t:"بطاقة/حساب إضافي أو تأمين دون موافقة", success:"مرتفعة جدًا", urgency:"عادية",
+  desc:"فتح بطاقات إضافية أو تفعيل تأمين دون طلب العميل، وتحميل رسومها شهريًا (V04/V14).",
+  docs:["كشوف الحساب","عقد البطاقة","إثبات عدم وجود طلب للبطاقة/التأمين"],
+  steps:["توثيق تواريخ إصدار البطاقة/التأمين وقيمها","طلب إلغاء واسترداد كامل الأقساط (T01)","التصعيد لسندك عند الرفض","مطالبة بتعويض الرسوم"],
+  assign:"إداري: المستندات — محاسب: إجمالي المبالغ — باحث: الشكوى",
+  note:"سهلة الإثبات: لا توجد توقيعات على طلب الإصدار."},
+ {id:"CT10", t:"خصومات غير مصرح بها من الحساب", success:"مرتفعة", urgency:"عاجلة",
+  desc:"البنك يخصم من حساب العميل (الجاري/الراتب) مبالغ غير متفق عليها أو أثناء التفاوض (V03/V13).",
+  docs:["كشوف الحساب المخصوم منه","تفاصيل كل خصم (تاريخ ومبلغ)","المراسلات أثناء التفاوض إن وجدت"],
+  steps:["حصر كل المبالغ المخصومة غير المصرح بها (محاسب)","طلب استرداد فوري كتابي (T01)","التصعيد لسندك عند الرفض","التحقق من عدم تجميد الحساب دون سبب (V18)"],
+  assign:"محاسب: الحصر — باحث: الشكوى — المستشار: التصعيد",
+  note:"إن كان الخصم من حساب الراتب لحساب البنك نفسه فغالبًا منصوص عليه في العقد — راجع العقد أولًا (باحث قانوني)."},
+ {id:"CT11", t:"تضخيم دَين عبر فوائد ورسوم مركبة", success:"متوسطة إلى مرتفعة", urgency:"متوسطة",
+  desc:"رصيد تضخم من فائدة أولية صغيرة إلى مبلغ كبير بسبب فوائد مركبة ورسوم تراكمية (V20/V02).",
+  docs:["كشوف الحساب التاريخية الكاملة","عقد البطاقة وجدول الفوائد","تفاصيل كل رسوم وفائدة"],
+  steps:["استخراج التسلسل التاريخي الكامل للرصيد","فصل الأصل عن الفوائد عن الرسوم (محاسب)","إعادة احتساب وفق العقد والقانون","اعتراض كتابي بجدول الإعادة الاحتساب (T01)","تفاوض على تسوية بالفارق + تصعيد سندك"],
+  assign:"محاسب: التسلسل الكامل — باحث: السند — المستشار: التفاوض",
+  note:"أطول حالة في التحليل لكن النتيجة عادة فرق كبير في الرصيد النهائي."}
+];
+/* ============ مراحل دورة حياة القضية ============ */
+const STAGES = [
+ {n:1, t:"الاتصال الأول", owner:"استقبال", d:"استقبال تواصل العميل وتسجيله",
+  checklist:["تسجيل بيانات المتصل في النظام فورًا (الاسم/الهوية/الهاتف/البنك/نوع المشكلة)","سؤال محدد: ما نوع المشكلة (رسوم/تسوية/تحرش/حجز/تقادم/متوفى/احتيال)؟","تحديد الأولوية: عاجلة جدًا (حجز/تحرش/احتيال) أم عادية","إبلاغ العميل بأن المكتب سيتواصل خلال 24 ساعة","إنشاء سجل عميل أولي وتحويله للإداري","حجز موعد استشارة أولية مع المستشار"],
+  docs:["بيانات المتصل","وصف مبدئي للمشكلة"], out:"سجل عميل أولي + موعد استشارة"},
+ {n:2, t:"الاستشارة الأولية", owner:"المستشار", d:"فهم الحالة وتحديد المسار",
+  checklist:["مراجعة سجل العميل قبل الموعد","الاستماع الكامل للعميل وتدوين كل تفاصيل","سؤال محدد: هل هناك إنذارات/دعاوى/حجز؟","تحديد نوع الحالة من قائمة الحالات (CT01-CT11)","شرح للعميل خيارات الإجراء المتاحة والاحتمالات","الاتفاق على الأتعاب ونطاق العمل كتابيًا","إصدار ملف قضية رسمي في النظام وتعيين الفريق"],
+  docs:["نموذج الاستشارة","اتفاق الأتعاب"], out:"ملف قضية رسمي + تعيين فريق"},
+ {n:3, t:"جمع المستندات", owner:"إداري", d:"استكمال ملف المستندات",
+  checklist:["طلب كل مستندات الحالة وفق قائمة نوع الحالة (CT)","استلام وتدقيق كل مستند (سارية/مكتملة/وضوح)","طلب كشوف الحساب من البنك إذا لم يوفرها العميل","الحصول على تقرير AECB","أرشفة المستندات رقميًا في ملف العميل","إخطار الباحث القانوني بأن الملف مكتمل"],
+  docs:["كشوف الحساب","العقد","هوية/إقامة","إثبات دخل/إنهاء","AECB"], out:"ملف مستندات مكتمل ومؤرشف"},
+ {n:4, t:"التحليل القانوني", owner:"باحث قانوني", d:"تصنيف وتحليل الحالة",
+  checklist:["مطابقة الحالة بنوع الحالة المناسب (CT01-CT11)","حصر المخالفات البنكية المحتملة (V01-V20)","تحديد السند القانوني لكل مخالفة","تحديد المسار: تسوية / اعتراض / شكوى / دعوى / دفاع","تحديد المهل القانونية ومتابعتها في النظام","إعداد مذكرة تحليل ومسار مقترح"],
+  docs:["مذكرة التحليل","جدول المخالفات"], out:"مذكرة تحليل + مسار مقترح"},
+ {n:5, t:"إعداد الملفات والمراسلات", owner:"باحث + محاسب", d:"صياغة الرسائل والحسابات",
+  checklist:["حساب المديونية الحقيقية (أصل + فوائد نظامية + رسوم نظامية فقط)","تحديد المبالغ المطلوب إلغاؤها/استردادها","اختيار القالب المناسب (T01-T12)","تخصيص القالب ببيانات العميل والمخالفات المحددة","مراجعة المستشار واعتماد الرسالة"],
+  docs:["حساب المديونية","جدول الإلغاءات","الرسالة المعتمدة"], out:"رسالة معتمدة جاهزة للإرسال"},
+ {n:6, t:"المراسلة مع البنك", owner:"إداري", d:"الإرسال الرسمي والمتابعة",
+  checklist:["إرسال الرسالة عبر القناة الرسمية الموثقة (بريد رسمي)","حفظ إثبات الإرسال (تاريخ/مرجع)","متابعة الرد خلال 7 أيام (تذكير)","إن لم يرد خلال 15 يوم عمل: تصعيد تلقائي إلى سندك (T04)","توثيق كل تواصل في سجل الملف"],
+  docs:["إثبات الإرسال","رد البنك"], out:"شكوى بنكية مفعلة + مهلة مراقبة"},
+ {n:7, t:"التسوية أو التصعيد", owner:"المستشار", d:"القرار الاستراتيجي",
+  checklist:["تقييم عرض التسوية مقابل النتائج القضائية المتوقعة","التفاوض على أفضل شروط (مبلغ/جدول/إغلاق)","عند القبول: خطاب اعتماد التسوية (T11) موقَّع","عند الرفض: تصعيد سندك أو رفع دعوى/دفاع قضائي","إخطار العميل بالقرار والمبررات"],
+  docs:["خطاب التسوية","قرار المسار"], out:"تسوية موقعة أو تصعيد رسمي"},
+ {n:8, t:"التقاضي (عند اللزوم)", owner:"المستشار", d:"رفع الدعوى أو الدفاع",
+  checklist:["إعداد صحيفة الدعوى/الدفاع بالكامل","استيفاء رسوم المحكمة","المثول والجلسات ومتابعة التواريخ","الإدلاء بالمستندات وطلبات الإثبات","متابعة الحكم"],
+  docs:["صحيفة الدعوى","المستندات القضائية"], out:"حكم قضائي"},
+ {n:9, t:"الاسترداد والتنفيذ", owner:"محاسب + المستشار", d:"تحصيل المبالغ المستردة",
+  checklist:["متابعة استلام المبالغ المستردة/تصفية الدين","توثيق كل مبلغ مسترد في النظام","تحديث حالة AECB للعميل","متابعة إغلاق البطاقة/الحساب"],
+  docs:["إيصالات الاسترداد","خطاب الإقفال"], out:"مبالغ مستردة/دين مسدد"},
+ {n:10, t:"إغلاق الملف", owner:"محاسب + المستشار", d:"التقرير النهائي والأتعاب",
+  checklist:["احتساب أتعاب المكتب وفق نسبة النجاح المحددة","إصدار التقرير النهائي للعميل","إرسال خطاب إقفال للبنك (T12)","أرشفة الملف كاملًا وعدم السماح بتعديله","تقييم الأداء ودروس مستفادة"],
+  docs:["التقرير النهائي","إيصال الأتعاب"], out:"ملف مغلق ومؤرشف"}
+];
+
+/* ============ الإعدادات ============ */
+const DEFAULT_SETTINGS = {
+  office:"مكتب النصر للمحاماة والاستشارات القانونية — دبي",
+  manager:"المستشار عبدالرحمن نصر",
+  feePercent:10, minFee:2000, currency:"درهم",
+  successThreshold:70
+};
+
+const USERS_SEED = [
+ {u:"nasser", p:"nasser2024", name:"المستشار عبدالرحمن نصر", role:"manager", active:true},
+ {u:"reception", p:"1234", name:"موظف الاستقبال", role:"reception", active:true},
+ {u:"admin", p:"1234", name:"الموظف الإداري", role:"admin", active:true},
+ {u:"legal", p:"1234", name:"الباحث القانوني", role:"legal", active:true},
+ {u:"account", p:"1234", name:"المحاسب", role:"accountant", active:true}
+];
+/* ============ الأدوار والموظفون ============ */
+const ROLES = [
+ {id:"manager", t:"المستشار عبدالرحمن نصر", s:"الإدارة والقيادة — مدير المكتب", ic:"⚖️", color:"#0e1a30",
+  perms:["all"],
+  tasks:["الاعتماد النهائي لكل الإجراءات والرسائل","التفاوض المباشر مع البنوك على التسويات","المثول أمام المحاكم واتخاذ الإجراءات القضائية","إدارة الفريق وتوزيع المهام وتقييم الأداء","اعتماد الأتعاب والتسويات المالية","قراءة تقارير لوحة القيادة واتخاذ قرارات التوسع","الإشراف على شكاوى سندك والتصعيدات"],
+  tools:["كامل صلاحيات النظام","إدارة المستخدمين والصلاحيات","اعتماد/تعديل الأتعاب ونسب النجاح","التقارير والتصدير","الوصول لكل ملفات العملاء"],
+  guideline:["ابدأ يومك بمراجعة لوحة القيادة وملفات الحالات العاجلة (حجز/تحرش/احتيال).","راجع مذكرة التحليل لكل ملف جديد قبل اعتماد المسار.","لا تسمح بإرسال أي رسالة خارجية دون اعتمادك.","راجع التسويات المكتملة يوميًا وتأكد من توثيق كل اتفاق.","اجتماع أسبوعي قصير مع الفريق لمراجعة الأداء والمهلات."]},
+ {id:"reception", t:"موظف الاستقبال", s:"أول نقطة تواصل مع العميل", ic:"📞", color:"#2563eb",
+  perms:["clients_create","clients_view","tasks_view","templates_view"],
+  tasks:["استقبال الاتصالات والزيارات وتسجيل كل تواصل فورًا","تسجيل بيانات العميل الأولية (الاسم/الهوية/الهاتف/البنك/وصف المشكلة)","تحديد أولوية الحالة (عاجلة جدًا/عاجلة/عادية)","حجز مواعيد الاستشارة مع المستشار","توجيه العميل للمستندات المطلوبة مبدئيًا","الرد الهاتفي باحترافية وتوثيق كل مكالمة","ترحيب العميل في المكتب وتدبير اللقاءات"],
+  tools:["نموذج تسجيل عميل سريع","سجل المكالمات","تقويم المواعيد","قائمة الحالات للتصنيف المبدئي"],
+  guideline:["كل مكالمة تُسجَّل في النظام قبل نهايتها — لا مكالمات غير موثقة.","اسأل دائمًا: هل هناك إنذار/دعوى/حجز؟ — إن نعم: أولوية عاجلة جدًا وأبلغ المستشار فورًا.","لا تقدّم أي استشارة قانونية بنفسك — دورك تسجيل وتوجيه فقط.","لا تتعهد بأي نتيجة للعميل — قل: المستشار سيحدد المسار.","احجز موعد الاستشارة خلال 48 ساعة كحد أقصى.","احتفظ بسرية كل بيانات العميل تمامًا."]},
+ {id:"admin", t:"الموظف الإداري", s:"المستندات والمراسلات", ic:"🗂️", color:"#9333ea",
+  perms:["clients_view","clients_edit","documents","correspondence","tasks_view"],
+  tasks:["جمع وتدقيق مستندات العميل وفق قائمة كل حالة","طلب الكشوف من البنوك وتتبعها","أرشفة المستندات رقميًا وتسميتها بشكل موحد","إرسال المراسلات المعتمدة عبر القنوات الرسمية","حفظ إثبات الإرسال وتوثيق الردود","متابعة المهل (7 أيام متابعة / 15 يوم عمل تصعيد)","تحديث حالة الملف في النظام بعد كل خطوة"],
+  tools:["قوائم المستندات لكل حالة","مكتبة القوالب (T01-T12)","أرشيف الملفات","متابعة المهل"],
+  guideline:["سمِّ كل مستند بالشكل: اسم العميل_نوع المستند_التاريخ.","لا ترسل أي رسالة لم تُعتمد من المستشار.","سجّل كل إرسال (تاريخ + قناة + رقم مرجعي) فورًا.","أول شيء في يومك: راجع المهل القريبة (متأخرة أو تنتهي اليوم).","إن لم يصل رد خلال 15 يوم عمل، أبلغ الباحث القانوني فورًا لتصعيد سندك."]},
+ {id:"legal", t:"الباحث القانوني", s:"التحليل والمسار القانوني", ic:"🔍", color:"#16a34a",
+  perms:["clients_view","case_analysis","legal_lib","templates_edit"],
+  tasks:["تحليل كل ملف جديد وتصنيفه وفق الحالات (CT01-CT11)","حصر المخالفات البنكية (V01-V20) وتحديد سندها القانوني","تحديد المهل القانونية ومتابعتها","إعداد مذكرة التحليل ومسار الإجراء المقترح","اختيار القالب المناسب وتخصيصه بالتفاصيل","مراقبة مستجدات القوانين وقرارات المصرف المركزي","إعداد الدفوع عند وجود دعوى (تقادم/سند/مبالغ)"],
+  tools:["جدول المخالفات والجزاءات","قاعدة القوانين","مكتبة القوالب","حالات العملاء المرجعية"],
+  guideline:["لا تعتمد مسارًا قبل حصر كل المستندات من الإداري.","سجّل كل مخالفة برمزها (V01-V20) مع تاريخها — هذا أساس أي شكوى أو دعوى.","راقب التواريخ الحساسة: التقادم، مهلة رد البنك (15 يوم عمل)، مهل الاستخدام الاحتيالي.","اقترح دائمًا خيارين على الأقل للمستشار مع ميزات كل خيار.","إذا واجهت حالة غير مذكورة في قائمة الحالات، صِفها واطلب اعتماد تصنيف جديد من المستشار."]},
+ {id:"accountant", t:"المحاسب", s:"الحسابات والأتعاب", ic:"🧮", color:"#0d9488",
+  perms:["clients_view","cases_view","finance","calculator","reports"],
+  tasks:["حساب المديونية الحقيقية لكل عميل (أصل + فوائد نظامية + رسوم نظامية)","تحديد المبالغ المخالفة القابلة للإلغاء (رسوم متضخمة/خصومات غير مصرح بها)","إعداد جدول الإعادة الاحتساب لكل اعتراض","متابعة المدفوعات والاستردادات وتوثيقها في النظام","احتساب أتعاب المكتب وفق نسبة النجاح","إعداد التقارير المالية الشهرية (إيرادات/مستردات/نسب)","التحقق من تحديث AECB بعد كل تسوية"],
+  tools:["حاسبة المديونية (في النظام)","جدول الأتعاب ونسب النجاح","التقارير المالية","سجل المدفوعات"],
+  guideline:["لا تحسب فوائد أو رسوم غير منصوص عليها في عقد البطاقة — احسب النظامي فقط.","افصل دائمًا: أصل / فوائد / رسوم — كل منها في سطر مستقل.","أي خصم غير مصرح به سجِّله كبند مستقل قابل للاسترداد.","لا تعتمد أي تسوية قبل المستشار — دورك الحساب فقط.","راجع إجمالي المستردات أسبوعيًا وأبلغ المستشار بأي تباين."]}
+];
+
+/* ============ الملف التدريبي — فصول النظام ============ */
+const TRAINING = [
+ {t:"الفصل 1: التعريف بالنظام والغرض منه", c:[
+  "نظام «النصر» هو العقل الرقمي لمكتب المحاماة المتخصص في مظلومي البطاقات الائتمانية والائتمان في دبي.",
+  "الغرض: توحيد طريقة العمل — كل عميل، كل قضية، كل رسالة، كل حساب، كل مخالفة بنكية لها مكان واحد ومسار واحد معروف.",
+  "المبدأ الأول: لا شيء يُدار من الذاكرة — كل شيء يُسجَّل في النظام فورًا.",
+  "المبدأ الثاني: لا رسالة تُرسل ولا تسوية تُعتمد إلا بموافقة المستشار عبدالرحمن نصر.",
+  "المبدأ الثالث: الدليل أولًا — أي إجراء بدون مستند موثق لا قيمة له أمام البنك أو سندك أو القضاء."]},
+ {t:"الفصل 2: دورة حياة القضية من أ إلى ي", c:[
+  "القضية تمر بعشر مراحل: الاتصال الأول ← الاستشارة ← المستندات ← التحليل ← الإعداد ← المراسلة ← التسوية/التصعيد ← التقاضي (عند اللزوم) ← الاسترداد ← الإغلاق.",
+  "لكل مرحلة: مسؤول محدد + قائمة تحقق + مستندات مطلوبة + مخرَج واضح (راجع قسم «دورة حياة القضية»).",
+  "الخطأ الأكثر شيوعًا: الانتقال للمراسلة قبل اكتمال المستندات — ذلك يضعف الاعتراض ويمنح البنك فرصة للرد الشكلي.",
+  "المهل الذهبية: 7 أيام لمتابعة رد البنك، 15 يوم عمل للرد النظامي ثم التصعيد لسندك، 24 ساعة في حالات الاحتيال."]},
+ {t:"الفصل 3: فهم البطاقة الائتمانية والدين", c:[
+  "الدين البنكي يتكون من: الأصل (الإنفاق الفعلي) + الفوائد (نسبة شهرية على الرصيد المستحق) + الرسوم (تأخير/سنوية/صرف/أخرى).",
+  "المشكلة عند معظم المظلومين: الرسوم والفوائد تتراكم على الرصيد فتتضخم لتتجاوز الأصل أحيانًا.",
+  "دورنا: فصل الأصل عن الفوائد عن الرسوم، ثم التحقق أن كل بند سليم نظاميًا، ثم إلغاء كل ما لا سند له.",
+  "الشيك كضمان للبطاقة: بعد قانون 50/2022 أصبح مساره مدنيًا/تنفيذيًا في معظم الحالات — لا خوف من تهديد «القضية الجنائية» على الدين التجاري.",
+  "التقادم: كقاعدة عامة 10 سنوات — لكن أي اعتراف أو سداد جزئي موثق قد يقطع سريانه، لذلك ممنوع أي تعهد قبل تحليل المستشار."]},
+ {t:"الفصل 4: سلاحنا القانوني — المعايير والمخالفات", c:[
+  "السند الأساسي: المرسوم بقانون 14/2018 + لائحة ومعايير حماية المستهلك للمصرف المركزي (17/2019).",
+  "أقوى المخالفات عمليًا: رسوم غير معلنة (V01)، رسوم تأخير مفرطة (V02)، خصم غير مصرح (V03)، تأمين دون موافقة (V04)، تحرش التحصيل (V05/V06)، عدم الرد على الشكوى (V10).",
+  "لكل مخالفة: وصف + سند + إجراء + جزاء على البنك — راجع جدول «المخالفات والجزاءات» قبل أي اعتراض.",
+  "قاعدة التصعيد: شكوى داخلية للبنك أولاً (15 يوم عمل) ← سندك مجانًا ← القضاء عند اللزوم. تخطي الخطوات يضعف الموقف."]},
+ {t:"الفصل 5: مهام كل موظف وكيف ينفذها", c:[
+  "الاستقبال: يسجل ويصنف ويحجز — لا استشارات ولا وعود. كل مكالمة توثق قبل نهايتها.",
+  "الإداري: يجمع المستندات ويرسل المراسلات المعتمدة ويتتبع المهل ويرتب الأرشيف باسم موحد.",
+  "الباحث القانوني: يحلل ويصنف الحالة (CT) ويسرد المخالفات (V) ويقترح المسار والقوالب المناسبة.",
+  "المحاسب: يحسب المديونية الحقيقية بالحاسبة، ويفصل الأصل/الفوائد/الرسوم، ويوثق المستردات ويحسب الأتعاب.",
+  "المستشار: يعتمد كل شيء، ويتفاوض، ويمثل أمام المحاكم، ويدير الفريق."]},
+ {t:"الفصل 6: التعامل مع العميل", c:[
+  "الاستماع الكامل أولاً — العميل المظلوم يحتاج أن يُفهم قبل أن يُحل ملفه.",
+  "لا تقدّم وعودًا: نسبة النجاح تُحدد بعد التحليل فقط، والتعهدات المسبقة خطر مهني وقانوني.",
+  "اشرح للمسار بلغة بسيطة: ماذا سنفعل، كم يستغرق، ماذا نحتاج منه، وماذا سنطلب من البنك.",
+  "احترام شديد في حالات الورثة (CT05) — سرية وهدوء في كل تواصل.",
+  "أبلغ العميل بكل تطور مهم في ملفه خلال 24 ساعة — الشفافية تبني الثقة وتقلل الضغط على المكتب."]},
+ {t:"الفصل 7: حاسبة المديونية خطوة بخطوة", c:[
+  "أدخل: الأصل (الإنفاق الفعلي)، الفائدة الشهرية من العقد، عدد الشهور، الرسوم المتراكمة، أي خصومات غير مصرح بها.",
+  "الناتج: المديونية المحتسبة وفق العقد مقابل المبلغ المطلوب من البنك، والفرق هو ما نطالب بإلغائه أو استرداده.",
+  "استخدم دائمًا سيناريوهين: سيناريو العقد (الحد الأدنى العادل) وسيناريو النزاع (ما نطالب به).",
+  "لا تنسَ: أي خصم غير مصرح يُضاف لمطالبة الاسترداد كسطر مستقل."]},
+ {t:"الفصل 8: القوالب — كيف تستخدمها صح", c:[
+  "القوالب T01-T12 جاهزة لكل مسار: اعتراض (T01)، تسوية (T02/T11)، شكوى داخلية (T03)، تصعيد سندك (T04)، ردود الإنذارات (T05/T06)، تحرش (T07)، جدولة (T08)، AECB (T09)، متابعة (T10)، إغلاق (T12).",
+  "استبدل كل ما بين [الأقواس] ببيانات العميل الفعلية — لا ترسل قالبًا فيه أقواس فارغة أبدًا.",
+  "بعد التخصيص: مراجعة المستشار ← إرسال عبر القناة الرسمية ← توثيق الإثبات في النظام.",
+  "احفظ دائمًا نسخة PDF/طباعة من كل رسالة مُرسلة في ملف العميل."]}
+];
+
+/* ============ اللائحة الإرشادية العامة ============ */
+const GUIDELINE = [
+ {t:"اللائحة الإرشادية العامة لجميع الموظفين", items:[
+  "الدقة في التسجيل: كل بيانات العميل والقضية تُدخل في النظام فور حدوثها — لا ملاحظات ورقية خارجية.",
+  "السرية: كل بيانات العملاء سرية تمامًا ولا تُشارك مع أي جهة خارج العمل.",
+  "الاحترام: لا تهوين ولا وعود — تواصل مهني كامل مع العملاء والبنوك.",
+  "المهلات: احترام المهل النظامية والتقويمية أولوية يومية — تأخير أي مهلة ضرب لحق العميل.",
+  "الاعتماد: لا إرسال خارجي إلا بعد اعتماد المستشار عبدالرحمن نصر.",
+  "الأرشفة: كل مستند ورسالة ورد يُحفظ في ملف العميل إلكترونيًا فورًا."]}
+];
+/* ============================================================
+   النصر ERP — منطق التطبيق
+============================================================ */
+const ALL_TEMPLATES = () => TEMPLATES.concat(TEMPLATES2, TEMPLATES3);
+const ALL_CASE_TYPES = () => CASE_TYPES.concat(CASE_TYPES2);
+const DB_KEY = "alnasr_db_v1";
+
+let DB = null, CUR = null;
+
+function uid(p){ return p + "-" + Math.random().toString(36).slice(2,7).toUpperCase(); }
+function today(){ return new Date().toISOString().slice(0,10); }
+function fmt(n){ return (Number(n)||0).toLocaleString("en-US"); }
+function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;").replace(/'/g,"&#39;"); }
+function bankName(id){ const b = BANKS.find(x=>x.id===id); return b ? b.ar : (id||"—"); }
+function roleOf(id){ return ROLES.find(r=>r.id===id); }
+function tmplOf(id){ return ALL_TEMPLATES().find(t=>t.id===id); }
+function ctOf(id){ return ALL_CASE_TYPES().find(c=>c.id===id); }
+function vioOf(code){ return VIOLATIONS.find(v=>v.code===code); }
+
+function defaultDB(){
+  return {clients:[], cases:[], tasks:[], payments:[], calls:[], logs:[],
+    users: JSON.parse(JSON.stringify(USERS_SEED)),
+    settings: JSON.parse(JSON.stringify(DEFAULT_SETTINGS))};
+}
+function loadDB(){
+  try{ const raw = localStorage.getItem(DB_KEY); DB = raw ? JSON.parse(raw) : defaultDB(); }
+  catch(e){ DB = defaultDB(); }
+  if(!DB.users) DB = defaultDB();
+}
+function saveDB(){ localStorage.setItem(DB_KEY, JSON.stringify(DB)); }
+function logAct(txt){ DB.logs.unshift({t:today()+ " " + new Date().toTimeString().slice(0,5), u:CUR?CUR.name:"—", txt}); DB.logs = DB.logs.slice(0,300); saveDB(); }
+
+/* ============ صلاحيات ============ */
+function can(perm){
+  if(!CUR) return false;
+  const r = roleOf(CUR.role); if(!r) return false;
+  return r.perms.includes("all") || r.perms.includes(perm);
+}
+
+/* ============ AUTH ============ */
+function doLogin(){
+  const u = document.getElementById("loginUser").value.trim().toLowerCase();
+  const p = document.getElementById("loginPass").value;
+  const user = DB.users.find(x=>x.u===u && x.p===p && x.active!==false);
+  if(!user){ document.getElementById("loginError").textContent = "اسم المستخدم أو كلمة المرور غير صحيحة، أو الحساب موقوف."; return; }
+  CUR = user; sessionStorage.setItem("alnasr_cur", JSON.stringify({u:user.u}));
+  document.getElementById("loginScreen").style.display = "none";
+  document.getElementById("app").style.display = "block";
+  document.getElementById("uName").textContent = user.name;
+  document.getElementById("uRole").textContent = roleOf(user.role) ? roleOf(user.role).t : user.role;
+  document.getElementById("uAvatar").textContent = user.name.trim().charAt(0);
+  logAct("تسجيل دخول");
+  buildNav(); go("dashboard");
+}
+function logout(){ CUR=null; sessionStorage.removeItem("alnasr_cur"); location.reload(); }
+
+/* ============ NAV ============ */
+const SECTIONS = [
+ {id:"dashboard",  ic:"📊", t:"لوحة القيادة", group:"الرئيسية", perm:null},
+ {id:"clients",    ic:"👥", t:"العملاء", group:"الرئيسية", perm:null},
+ {id:"cases",      ic:"⚖️", t:"القضايا والملفات", group:"الرئيسية", perm:null},
+ {id:"workflow",   ic:"🧭", t:"دورة حياة القضية", group:"الإجراءات", perm:null},
+ {id:"casetypes",  ic:"📋", t:"حالات العملاء (دليل)", group:"الإجراءات", perm:null},
+ {id:"banks",      ic:"🏦", t:"البنوك الإماراتية", group:"قاعدة المعرفة", perm:null},
+ {id:"violations", ic:"🚫", t:"المخالفات والجزاءات", group:"قاعدة المعرفة", perm:null},
+ {id:"laws",       ic:"📜", t:"القوانين المرجعية", group:"قاعدة المعرفة", perm:null},
+ {id:"templates",  ic:"✉️", t:"نماذج الإيميلات والردود", group:"قاعدة المعرفة", perm:null},
+ {id:"calc",       ic:"🧮", t:"حاسبة المديونية", group:"المالية", perm:null},
+ {id:"payments",   ic:"💰", t:"المستردات والأتعاب", group:"المالية", perm:"finance"},
+ {id:"employees",  ic:"👔", t:"الموظفون والأدوار", group:"الفريق", perm:null},
+ {id:"tasks",      ic:"✅", t:"المهام", group:"الفريق", perm:null},
+ {id:"training",   ic:"🎓", t:"الملف التدريبي", group:"الفريق", perm:null},
+ {id:"guideline",  ic:"📌", t:"اللائحة الإرشادية", group:"الفريق", perm:null},
+ {id:"adminsec",   ic:"🛡️", t:"الإدارة والمستخدمون", group:"النظام", perm:"all"}
+];
+function buildNav(){
+  const sb = document.getElementById("sidebar"); let h="", lastGroup=null;
+  SECTIONS.forEach(s=>{
+    if(s.perm && !can(s.perm)) return;
+    if(s.perm==="all" && !can("all")) return;
+    if(s.group!==lastGroup){ h+=`<div class="nav-sec">${s.group}</div>`; lastGroup=s.group; }
+    const n = s.id==="tasks" ? DB.tasks.filter(t=>t.assignee===CUR.u && t.status!=="منجزة").length : 0;
+    h+=`<button class="nav-item" id="nav-${s.id}" onclick="go('${s.id}')"><span class="ic">${s.ic}</span>${s.t}${n?`<span class="badge-n">${n}</span>`:""}</button>`;
+  });
+  sb.innerHTML = h;
+}
+function go(id){
+  const s = SECTIONS.find(x=>x.id===id); if(!s) return;
+  if(s.perm && !can(s.perm)){ toast("لا تملك صلاحية الوصول لهذا القسم","err"); return; }
+  document.querySelectorAll(".nav-item").forEach(b=>b.classList.remove("active"));
+  const nb = document.getElementById("nav-"+id); if(nb) nb.classList.add("active");
+  const R = {dashboard:pgDashboard, clients:pgClients, cases:pgCases, workflow:pgWorkflow,
+    casetypes:pgCaseTypes, banks:pgBanks, violations:pgViolations, laws:pgLaws,
+    templates:pgTemplates, calc:pgCalc, payments:pgPayments, employees:pgEmployees,
+    tasks:pgTasks, training:pgTraining, guideline:pgGuideline, adminsec:pgAdmin};
+  const m = document.getElementById("main");
+  m.innerHTML = `<div class="fade-in">${(R[id]||pgDashboard)()}</div>`;
+  window.scrollTo(0,0);
+  if(id==="calc") setTimeout(initCalc, 30);
+}
+
+/* ============ TOAST / MODAL ============ */
+function toast(msg, cls){
+  const d = document.createElement("div"); d.className = "toast "+(cls||""); d.textContent = msg;
+  document.getElementById("toastRoot").appendChild(d);
+  setTimeout(()=>d.remove(), 3200);
+}
+function openModal(title, bodyHtml, footHtml, wide){
+  document.getElementById("modalRoot").innerHTML =
+   `<div class="modal-bg" onclick="if(event.target===this)closeModal()">
+      <div class="modal ${wide?"wide":""}">
+        <div class="modal-head"><h3>${title}</h3><button onclick="closeModal()">✕</button></div>
+        <div class="modal-body">${bodyHtml}</div>
+        ${footHtml?`<div class="modal-foot">${footHtml}</div>`:""}
+      </div></div>`;
+}
+function closeModal(){ document.getElementById("modalRoot").innerHTML=""; }
+function copyText(txt, btn){
+  navigator.clipboard.writeText(txt).then(()=>{ btn.textContent="✅ تم النسخ"; toast("تم نسخ النص إلى الحافظة","ok");
+    setTimeout(()=>btn.textContent="📋 نسخ",1800); });
+}
+function printArea(){ window.print(); }
+
+/* ============ HELPERS ============ */
+function caseById(id){ return DB.cases.find(c=>c.id===id); }
+function clientById(id){ return DB.clients.find(c=>c.id===id); }
+function caseStatusLabel(st){
+  return {"جديدة":"b-blue","قيد الإجراء":"b-amber","مراسلات جارية":"b-gold","تسوية قائمة":"b-purple","تقاضي":"b-red","مغلقة-ناجحة":"b-green","مغلقة":"b-gray"}[st]||"b-gray";
+}
+function priorityBadge(p){ return {"عاجلة جدًا":"b-red","عاجلة":"b-amber","عادية":"b-gray","حساسة":"b-purple"}[p]||"b-gray"; }
+function num(id){ return Number(document.getElementById(id).value)||0; }
+function val(id){ return (document.getElementById(id).value||"").trim(); }
+/* ============ لوحة القيادة ============ */
+function pgDashboard(){
+  const cs = DB.cases, cl = DB.clients;
+  const active = cs.filter(c=>c.status!=="مغلقة-ناجحة"&&c.status!=="مغلقة").length;
+  const closed = cs.filter(c=>c.status==="مغلقة-ناجحة").length;
+  const recovered = DB.payments.filter(p=>p.type==="استرداد").reduce((a,p)=>a+Number(p.amount||0),0);
+  const fees = DB.payments.filter(p=>p.type==="أتعاب").reduce((a,p)=>a+Number(p.amount||0),0);
+  const debt = cs.reduce((a,c)=>a+Number(c.amount||0),0);
+  const success = cs.length ? Math.round(closed/Math.max(cs.filter(c=>c.status.startsWith("مغلقة")).length||1,1)*100) : 0;
+  const byBank = {}; cs.forEach(c=>{ byBank[c.bank]= (byBank[c.bank]||0)+1; });
+  const bankRows = Object.entries(byBank).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const maxB = Math.max(...bankRows.map(x=>x[1]),1);
+  const urgent = cs.filter(c=>c.priority==="عاجلة جدًا" && !c.status.startsWith("مغلقة"));
+
+  return `
+  <div class="page-head"><h2>لوحة القيادة</h2><div class="actions">
+    <button class="btn ghost" onclick="printArea()">🖨️ طباعة</button>
+    <button class="btn primary" onclick="clientForm()">➕ عميل جديد</button></div>
+    <div class="desc">${DB.settings.office} — نظرة شاملة لحظية على العمل والنتائج</div></div>
+
+  <div class="grid g4" style="margin-bottom:16px">
+    <div class="kpi navy"><span class="k-icon">👥</span><div class="k-label">العملاء</div><div class="k-val num">${cl.length}</div><div class="k-sub">${cl.filter(c=>c.status==="جديد").length} عميل جديد بانتظار الاستشارة</div></div>
+    <div class="kpi gold"><span class="k-icon">⚖️</span><div class="k-label">القضايا النشطة</div><div class="k-val num">${active}</div><div class="k-sub">من إجمالي ${cs.length} قضية</div></div>
+    <div class="kpi green"><span class="k-icon">📈</span><div class="k-label">نسبة النجاح</div><div class="k-val num">${success}%</div><div class="k-sub">${closed} قضية مغلقة بنجاح</div></div>
+    <div class="kpi teal"><span class="k-icon">💰</span><div class="k-label">المبالغ المستردة</div><div class="k-val num">${fmt(recovered)}</div><div class="k-sub">درهم — لأجل العملاء</div></div>
+    <div class="kpi purple"><span class="k-icon">🧾</span><div class="k-label">أتعاب المكتب</div><div class="k-val num">${fmt(fees)}</div><div class="k-sub">درهم — وفق نسبة ${DB.settings.feePercent}%</div></div>
+    <div class="kpi red"><span class="k-icon">🔥</span><div class="k-label">حالات عاجلة جدًا</div><div class="k-val num">${urgent.length}</div><div class="k-sub">حجز/تحرش/احتيال — أولوية قصوى</div></div>
+    <div class="kpi blue"><span class="k-icon">🏦</span><div class="k-label">إجمالي الديون المتنازع عليها</div><div class="k-val num">${fmt(debt)}</div><div class="k-sub">درهم</div></div>
+    <div class="kpi amber"><span class="k-icon">✅</span><div class="k-label">مهام مفتوحة</div><div class="k-val num">${DB.tasks.filter(t=>t.status!=="منجزة").length}</div><div class="k-sub">موزعة على الفريق</div></div>
+  </div>
+
+  <div class="grid g2">
+    <div class="card"><h3><span class="dot"></span>القضايا حسب البنك (الأكثر نشاطًا)</h3>
+      <div class="bars">${bankRows.length? bankRows.map(([b,n])=>`
+        <div class="bar-w"><div class="bar" style="height:${Math.round(n/maxB*100)}%"><span>${n}</span></div><div class="bar-l">${esc(b).slice(0,14)}</div></div>`).join("") : `<div class="empty"><div class="e-ic">📊</div>لا توجد قضايا بعد</div>`}
+      </div></div>
+    <div class="card"><h3><span class="dot"></span>توزيع حالات القضايا</h3>
+      ${donutStatus(cs)}</div>
+  </div>
+
+  <div class="grid g2">
+    <div class="card"><h3><span class="dot"></span>أحدث العملاء</h3>
+      ${cl.slice(-5).reverse().map(c=>`<div class="stat-line"><span>${esc(c.name)} <span class="badge ${priorityBadge(c.priority)}">${esc(c.priority)}</span></span><b>${esc(bankName(c.bank))}</b></div>`).join("") || `<div class="empty"><div class="e-ic">👤</div>لا يوجد عملاء</div>`}
+      <button class="btn ghost" style="margin-top:10px" onclick="go('clients')">عرض الكل ←</button></div>
+    <div class="card"><h3><span class="dot"></span>سجل النشاط</h3>
+      ${DB.logs.slice(0,8).map(l=>`<div class="stat-line"><span style="color:var(--muted);font-size:12px">${l.t} — ${esc(l.u)}</span><span>${esc(l.txt)}</span></div>`).join("") || `<div class="empty">لا يوجد نشاط</div>`}</div>
+  </div>`;
+}
+function donutStatus(cs){
+  const cats = [{"k":"جديدة","c":"#3b82f6"},{"k":"قيد الإجراء","c":"#f59e0b"},{"k":"مراسلات جارية","c":"#c9a24b"},{"k":"تسوية قائمة","c":"#a855f7"},{"k":"تقاضي","c":"#ef4444"},{"k":"مغلقة-ناجحة","c":"#22c55e"},{"k":"مغلقة","c":"#94a3b8"}];
+  const counts = cats.map(x=>({...x,n:cs.filter(c=>c.status===x.k).length}));
+  const tot = counts.reduce((a,x)=>a+x.n,0);
+  if(!tot) return `<div class="empty"><div class="e-ic">⚖️</div>لا توجد قضايا بعد</div>`;
+  let acc=0, segs="";
+  counts.forEach(x=>{ if(!x.n) return; const from=acc/tot*360, to=(acc+x.n)/tot*360; acc+=x.n;
+    segs += `${x.c} ${from}deg ${to}deg, `; });
+  return `<div class="donut-wrap">
+    <div class="donut" style="background:conic-gradient(${segs.slice(0,-2)})"><div class="d-center"><b class="num">${tot}</b><small>قضية</small></div></div>
+    <div class="legend">${counts.filter(x=>x.n).map(x=>`<div><i style="background:${x.c}"></i>${x.k}: <b>${x.n}</b></div>`).join("")}</div></div>`;
+}
+
+/* ============ العملاء ============ */
+function pgClients(){
+  const mineOnly = CUR.role==="reception";
+  let list = DB.clients.slice().reverse();
+  return `
+  <div class="page-head"><h2>العملاء</h2><div class="actions">
+    ${can("clients_create")||can("all")?`<button class="btn primary" onclick="clientForm()">➕ تسجيل عميل جديد</button>`:""}</div>
+    <div class="desc">سجل العملاء الكامل — من أول اتصال حتى إغلاق الملف</div></div>
+  <div class="card">
+    <div class="searchbar">
+      <input id="clSearch" placeholder="🔍 بحث بالاسم / الهوية / الهاتف" oninput="renderClientsTbl()">
+      <select id="clPriority" onchange="renderClientsTbl()"><option value="">كل الأولويات</option><option>عاجلة جدًا</option><option>عاجلة</option><option>عادية</option><option>حساسة</option></select>
+      <select id="clBank" onchange="renderClientsTbl()"><option value="">كل البنوك</option>${BANKS.map(b=>`<option value="${b.id}">${b.ar}</option>`).join("")}</select>
+    </div>
+    <div id="clientsTbl"></div>
+  </div>`;
+}
+function renderClientsTbl(){
+  const q = (document.getElementById("clSearch")?.value||"").trim();
+  const pr = document.getElementById("clPriority")?.value||"";
+  const bk = document.getElementById("clBank")?.value||"";
+  const list = DB.clients.filter(c=>{
+    return (!q || (c.name+c.emiratesId+c.phone).includes(q)) && (!pr||c.priority===pr) && (!bk||c.bank===bk);
+  }).reverse();
+  const el = document.getElementById("clientsTbl");
+  if(!list.length){ el.innerHTML = `<div class="empty"><div class="e-ic">👤</div>لا توجد نتائج — سجّل عميلًا جديدًا</div>`; return; }
+  el.innerHTML = `<div class="tbl-wrap"><table class="tbl"><thead><tr>
+    <th>الاسم</th><th>الهوية</th><th>الهاتف</th><th>البنك</th><th>نوع الحالة</th><th>الأولوية</th><th>التاريخ</th><th>القضية</th><th></th></tr></thead><tbody>
+    ${list.map(c=>{ const cs = DB.cases.find(x=>x.clientId===c.id);
+      return `<tr><td><b>${esc(c.name)}</b></td><td class="num">${esc(c.emiratesId)}</td><td class="num">${esc(c.phone)}</td>
+      <td>${esc(bankName(c.bank))}</td><td>${esc(c.caseType?ctOf(c.caseType)?.t||"—":"—")}</td>
+      <td><span class="badge ${priorityBadge(c.priority)}">${esc(c.priority)}</span></td><td class="num">${esc(c.created)}</td>
+      <td>${cs?`<a href="#" onclick="caseDetail('${cs.id}');return false" style="color:var(--gold-dim);font-weight:700">${cs.id}</a>`:"<span class='badge b-gray'>لا يوجد</span>"}</td>
+      <td style="white-space:nowrap"><button class="btn small ghost" onclick="clientDetail('${c.id}')">👁️</button>
+      ${can("all")||can("clients_edit")?`<button class="btn small ghost" onclick="clientForm('${c.id}')">✏️</button>`:""}
+      ${can("all")&&!cs?`<button class="btn small primary" onclick="caseForm(null,'${c.id}')">⚖️ فتح قضية</button>`:""}</td></tr>`;}).join("")}
+  </tbody></table></div>`;
+}
+function clientDetail(id){
+  const c = clientById(id); if(!c) return;
+  const cs = DB.cases.find(x=>x.clientId===id);
+  const ct = c.caseType?ctOf(c.caseType):null;
+  openModal("ملف العميل — "+esc(c.name), `
+    <div class="grid g2">
+      <div class="card"><h3><span class="dot"></span>البيانات الأساسية</h3>
+        <div class="stat-line"><span>الاسم</span><b>${esc(c.name)}</b></div>
+        <div class="stat-line"><span>رقم الهوية الإماراتية</span><b class="num">${esc(c.emiratesId)}</b></div>
+        <div class="stat-line"><span>الهاتف</span><b class="num">${esc(c.phone)}</b></div>
+        <div class="stat-line"><span>البريد الإلكتروني</span><b>${esc(c.email||"—")}</b></div>
+        <div class="stat-line"><span>البنك المعني</span><b>${esc(bankName(c.bank))}</b></div>
+        <div class="stat-line"><span>نوع الحالة</span><b>${ct?esc(ct.t):"—"}</b></div>
+        <div class="stat-line"><span>الأولوية</span><b>${esc(c.priority)}</b></div>
+        <div class="stat-line"><span>تاريخ التسجيل</span><b class="num">${esc(c.created)}</b></div></div>
+      <div class="card"><h3><span class="dot"></span>وصف المشكلة</h3>
+        <p style="white-space:pre-wrap;font-size:13.5px">${esc(c.notes||"—")}</p>
+        ${ct?`<div class="alert gold" style="margin-top:12px"><b>مستندات مطلوبة لـ ${esc(ct.t)}:</b><br>${ct.docs.map(d=>"• "+esc(d)).join("<br>")}</div>`:""}
+      </div>
+    </div>
+    ${cs?`<button class="btn primary" onclick="caseDetail('${cs.id}')">⚖️ الانتقال إلى القضية ${cs.id}</button>`:""}
+  `, `<button class="btn ghost" onclick="closeModal()">إغلاق</button>`);
+}
+function clientForm(id){
+  const c = id?clientById(id):null;
+  openModal(c?"تعديل بيانات العميل":"تسجيل عميل جديد", `
+    <div class="field"><label>الاسم الكامل *</label><input id="cfName" value="${c?esc(c.name):""}"></div>
+    <div class="frow">
+      <div class="field"><label>رقم الهوية الإماراتية</label><input id="cfId" value="${c?esc(c.emiratesId):""}" placeholder="784-xxxx-xxxxxxx-x"></div>
+      <div class="field"><label>رقم الهاتف *</label><input id="cfPhone" value="${c?esc(c.phone):""}"></div>
+    </div>
+    <div class="frow">
+      <div class="field"><label>البريد الإلكتروني</label><input id="cfEmail" value="${c?esc(c.email||""):""}"></div>
+      <div class="field"><label>البنك المعني</label><select id="cfBank">${BANKS.filter(b=>!["sanadak","cbuae","aeccb"].includes(b.id)).map(b=>`<option value="${b.id}" ${c&&c.bank===b.id?"selected":""}>${b.ar} (${b.en})</option>`).join("")}</select></div>
+    </div>
+    <div class="frow">
+      <div class="field"><label>نوع الحالة</label><select id="cfCT"><option value="">— حدد لاحقًا بعد الاستشارة —</option>${ALL_CASE_TYPES().map(t=>`<option value="${t.id}" ${c&&c.caseType===t.id?"selected":""}>${t.id} — ${t.t}</option>`).join("")}</select></div>
+      <div class="field"><label>الأولوية</label><select id="cfPriority">${["عاجلة جدًا","عاجلة","عادية","حساسة"].map(p=>`<option ${c&&c.priority===p?"selected":""}>${p}</option>`).join("")}</select></div>
+    </div>
+    <div class="field"><label>وصف المشكلة (كما ذكرها العميل)</label><textarea id="cfNotes" rows="4">${c?esc(c.notes||""):""}</textarea></div>
+  `, `<button class="btn ghost" onclick="closeModal()">إلغاء</button><button class="btn primary" onclick="saveClient('${id||""}')">💾 حفظ</button>`);
+}
+function saveClient(id){
+  const name = val("cfName"), phone = val("cfPhone");
+  if(!name||!phone){ toast("الاسم والهاتف مطلوبان","err"); return; }
+  const data = {name, emiratesId:val("cfId"), phone, email:val("cfEmail"), bank:val("cfBank"),
+    caseType:val("cfCT"), priority:val("cfPriority")||"عادية", notes:val("cfNotes")};
+  if(id){ Object.assign(clientById(id), data); logAct("تعديل عميل: "+name); }
+  else { DB.clients.push({id:uid("CL"), created:today(), status:"جديد", ...data}); logAct("تسجيل عميل جديد: "+name); }
+  saveDB(); closeModal(); toast("تم حفظ بيانات العميل","ok"); go("clients");
+}
+
+/* ============ القضايا ============ */
+function pgCases(){
+  return `
+  <div class="page-head"><h2>القضايا والملفات</h2><div class="actions">
+    ${can("all")?`<button class="btn primary" onclick="caseForm()">➕ فتح قضية</button>`:""}
+    <button class="btn ghost" onclick="printArea()">🖨️ طباعة</button></div>
+    <div class="desc">كل ملف قضية يتبع دورة حياة القضية من 10 مراحل مع قائمة تحقق لكل مرحلة</div></div>
+  <div class="card">
+    <div class="searchbar">
+      <input id="csSearch" placeholder="🔍 بحث برقم القضية / اسم العميل" oninput="renderCasesTbl()">
+      <select id="csStatus" onchange="renderCasesTbl()"><option value="">كل الحالات</option>
+        ${["جديدة","قيد الإجراء","مراسلات جارية","تسوية قائمة","تقاضي","مغلقة-ناجحة","مغلقة"].map(s=>`<option>${s}</option>`).join("")}</select>
+    </div>
+    <div id="casesTbl"></div>
+  </div>`;
+}
+function renderCasesTbl(){
+  const q = (document.getElementById("csSearch")?.value||"").trim();
+  const st = document.getElementById("csStatus")?.value||"";
+  const list = DB.cases.filter(c=>(!q || (c.id + (clientById(c.clientId)?.name||"")).includes(q)) && (!st||c.status===st)).reverse();
+  const el = document.getElementById("casesTbl");
+  if(!list.length){ el.innerHTML = `<div class="empty"><div class="e-ic">⚖️</div>لا توجد قضايا مطابقة — افتح قضية جديدة من ملف العميل</div>`; return; }
+  el.innerHTML = `<div class="tbl-wrap"><table class="tbl"><thead><tr>
+    <th>رقم الملف</th><th>العميل</th><th>البنك</th><th>نوع الحالة</th><th>مبلغ النزاع (درهم)</th><th>المسار</th><th>الحالة</th><th>المرحلة</th><th></th></tr></thead><tbody>
+    ${list.map(c=>{ const cl = clientById(c.clientId); const stage = c.stage||1;
+      return `<tr><td><b style="color:var(--gold-dim)">${c.id}</b></td><td>${esc(cl?cl.name:"—")}</td>
+      <td>${esc(c.bank)}</td><td>${esc(ctOf(c.caseType)?.t||"—")}</td><td class="num">${fmt(c.amount)}</td>
+      <td>${esc(c.path||"—")}</td><td><span class="badge ${caseStatusLabel(c.status)}">${esc(c.status)}</span></td>
+      <td><span class="badge b-blue">${stage}/10</span></td>
+      <td style="white-space:nowrap"><button class="btn small primary" onclick="caseDetail('${c.id}')">📂 الملف</button></td></tr>`;}).join("")}
+  </tbody></table></div>`;
+}
+function caseForm(id, clientId){
+  const c = id?caseById(id):null;
+  const clList = DB.clients.map(x=>`<option value="${x.id}" ${c&&c.clientId===x.id?"selected":(clientId===x.id?"selected":"")}>${esc(x.name)}</option>`).join("");
+  openModal(c?"تعديل القضية":"فتح قضية جديدة", `
+    <div class="frow">
+      <div class="field"><label>العميل *</label><select id="jfClient">${clList}</select></div>
+      <div class="field"><label>البنك</label><select id="jfBank">${BANKS.filter(b=>!["sanadak","cbuae","aeccb"].includes(b.id)).map(b=>`<option value="${b.ar}" ${c&&c.bank===b.ar?"selected":""}>${b.ar} (${b.en})</option>`).join("")}</select></div>
+    </div>
+    <div class="frow">
+      <div class="field"><label>نوع الحالة *</label><select id="jfCT">${ALL_CASE_TYPES().map(t=>`<option value="${t.id}" ${c&&c.caseType===t.id?"selected":""}>${t.id} — ${t.t}</option>`).join("")}</select></div>
+      <div class="field"><label>المسار</label><select id="jfPath">${["تسوية","اعتراض على الرسوم","شكوى + تصعيد سندك","تقاضي/دفاع","جدولة وتقسيط","استرداد خصومات","دفاع بالتقادم"].map(p=>`<option ${c&&c.path===p?"selected":""}>${p}</option>`).join("")}</select></div>
+    </div>
+    <div class="frow">
+      <div class="field"><label>مبلغ النزاع (درهم)</label><input id="jfAmount" type="number" value="${c?c.amount:""}" placeholder="0"></div>
+      <div class="field"><label>حالة الملف</label><select id="jfStatus">${["جديدة","قيد الإجراء","مراسلات جارية","تسوية قائمة","تقاضي","مغلقة-ناجحة","مغلقة"].map(s=>`<option ${c&&c.status===s?"selected":""}>${s}</option>`).join("")}</select></div>
+    </div>
+    <div class="field"><label>الخطوات المنفذة في دورة الحياة (المرحلة الحالية)</label>
+      <select id="jfStage">${STAGES.map(s=>`<option value="${s.n}" ${c&&c.stage===s.n?"selected":""}>${s.n}. ${s.t}</option>`).join("")}</select></div>
+    <div class="field"><label>ملاحظات</label><textarea id="jfNotes" rows="3">${c?esc(c.notes||""):""}</textarea></div>
+  `, `<button class="btn ghost" onclick="closeModal()">إلغاء</button><button class="btn primary" onclick="saveCase('${id||""}')">💾 حفظ وفتح الملف</button>`);
+}
+function saveCase(id){
+  const data = {clientId:val("jfClient"), bank:val("jfBank"), caseType:val("jfCT"), path:val("jfPath"),
+    amount:num("jfAmount"), status:val("jfStatus"), stage:Number(val("jfStage"))||1, notes:val("jfNotes")};
+  if(!data.clientId){ toast("اختر العميل","err"); return; }
+  if(id){ Object.assign(caseById(id), data); logAct("تعديل قضية: "+id); }
+  else {
+    const nc = {id:"CS-"+String(Date.now()).slice(-6), opened:today(), progress:{}, ...data};
+    DB.cases.push(nc); logAct("فتح قضية جديدة: "+nc.id);
+    STAGES.slice(0,3).forEach(s=>s.checklist.forEach((chk,i)=>{ nc.progress[s.n+"-"+i]={done:false}; }));
+  }
+  saveDB(); closeModal(); toast("تم حفظ القضية","ok"); go("cases");
+}
+function caseDetail(id){
+  const c = caseById(id); if(!c) return;
+  const cl = clientById(c.clientId);
+  const stagesHtml = STAGES.map(s=>{
+    const cls = c.stage>s.n?"done":(c.stage===s.n?"active":"");
+    return `<div class="stage ${cls}"><div class="s-dot">${c.stage>s.n?"✓":s.n}</div><div class="s-t">${s.t}</div><div class="s-d">${s.owner}</div></div>`;
+  }).join("");
+  const cur = STAGES[c.stage-1];
+  openModal("ملف القضية "+c.id+" — "+esc(cl?cl.name:""), `
+    <div class="card"><h3><span class="dot"></span>دورة الحياة — المرحلة الحالية: ${c.stage}/10 (${cur.t})</h3>
+      <div class="stages">${stagesHtml}</div></div>
+    <div class="grid g2">
+      <div class="card"><h3><span class="dot"></span>بيانات القضية</h3>
+        <div class="stat-line"><span>العميل</span><b>${esc(cl?cl.name:"—")}</b></div>
+        <div class="stat-line"><span>البنك</span><b>${esc(c.bank)}</b></div>
+        <div class="stat-line"><span>نوع الحالة</span><b>${esc(ctOf(c.caseType)?.t||"—")}</b></div>
+        <div class="stat-line"><span>المسار</span><b>${esc(c.path||"—")}</b></div>
+        <div class="stat-line"><span>مبلغ النزاع</span><b class="num">${fmt(c.amount)} درهم</b></div>
+        <div class="stat-line"><span>الحالة</span><b><span class="badge ${caseStatusLabel(c.status)}">${esc(c.status)}</span></b></div>
+        <div class="stat-line"><span>تاريخ الفتح</span><b class="num">${esc(c.opened)}</b></div></div>
+      <div class="card"><h3><span class="dot"></span>قائمة تحقق المرحلة الحالية — ${cur.t}</h3>
+        <div class="progress-bar-wrap"><div class="progress" style="flex:1"><i id="chkBar"></i></div><span id="chkPct"></span></div>
+        <div id="chkList"></div></div>
+    </div>
+    <div class="card"><h3><span class="dot"></span>ملاحظات الملف</h3><p style="white-space:pre-wrap;font-size:13.5px">${esc(c.notes||"—")}</p></div>
+  `, `
+    <button class="btn ghost" onclick="printArea()">🖨️ طباعة الملف</button>
+    ${can("all")?`<button class="btn ghost" onclick="closeModal();caseForm('${c.id}')">✏️ تعديل</button>
+    <button class="btn primary" onclick="advanceStage('${c.id}')">➡️ إنهاء المرحلة والانتقال للتالية</button>`:""}
+    <button class="btn ghost" onclick="closeModal()">إغلاق</button>`, true);
+  renderCaseChecklist(c);
+}
+function renderCaseChecklist(c){
+  const cur = STAGES[c.stage-1];
+  const doneCount = cur.checklist.filter((_,i)=>c.progress?.[c.stage+"-"+i]?.done).length;
+  const pct = Math.round(doneCount/cur.checklist.length*100);
+  const bar = document.getElementById("chkBar"), pctEl = document.getElementById("chkPct");
+  if(bar){ bar.style.width = pct+"%"; pctEl.textContent = pct+"%"; }
+  const el = document.getElementById("chkList"); if(!el) return;
+  el.innerHTML = cur.checklist.map((t,i)=>{
+    const key = c.stage+"-"+i, done = c.progress?.[key]?.done;
+    return `<label class="chk ${done?"done":""}"><input type="checkbox" ${done?"checked":""} ${can("all")?"":"disabled"} onchange="toggleChk('${c.id}',${c.stage},${i},this.checked)"><div><div class="chk-t">${esc(t)}</div></div></label>`;
+  }).join("");
+}
+function toggleChk(cid, st, i, on){
+  const c = caseById(cid); c.progress = c.progress||{}; c.progress[st+"-"+i] = {done:on}; saveDB();
+  renderCaseChecklist(c);
+}
+function advanceStage(cid){
+  const c = caseById(cid); const cur = STAGES[c.stage-1];
+  const all = cur.checklist.every((_,i)=>c.progress?.[c.stage+"-"+i]?.done);
+  if(!all && !confirm("ليست كل خطوات المرحلة مكتملة — متابعة الانتقال؟")) return;
+  if(c.stage<10){ c.stage++; logAct("انتقال القضية "+cid+" إلى المرحلة "+c.stage); }
+  else { toast("الملف في المرحلة الأخيرة — أغلقه من تعديل الحالة","err"); return; }
+  saveDB(); closeModal(); caseDetail(cid);
+}
+/* ============ دورة حياة القضية ============ */
+function pgWorkflow(){
+  return `
+  <div class="page-head"><h2>دورة حياة القضية — من أول لحظة لآخر لحظة</h2>
+    <div class="desc">عشر مراحل موحدة لكل قضية، لكل مرحلة مسؤول وقائمة تحقق ومستندات ومخرَج — اتبعها بالترتيب دون تخطٍ</div></div>
+  ${STAGES.map(s=>`
+  <div class="card"><h3><span class="dot"></span>المرحلة ${s.n}: ${s.t} <span class="badge b-gold">المسؤول: ${s.owner}</span></h3>
+    <div class="grid g2">
+      <div><b style="font-size:13px;color:var(--navy-700)">قائمة التحقق:</b><br>
+        ${s.checklist.map((t,i)=>`<div class="chk" style="cursor:default"><span style="color:var(--gold);font-weight:900">${i+1}.</span><div><div class="chk-t">${esc(t)}</div></div></div>`).join("")}</div>
+      <div><b style="font-size:13px;color:var(--navy-700)">المستندات المطلوبة:</b>
+        ${s.docs.map(d=>`<div class="stat-line"><span>📄</span><b>${esc(d)}</b></div>`).join("")}
+        <div class="alert info" style="margin-top:10px"><b>المخرَج النهائي للمرحلة:</b> ${esc(s.out)}</div></div>
+    </div></div>`).join("")}`;
+}
+
+/* ============ حالات العملاء ============ */
+function pgCaseTypes(){
+  return `
+  <div class="page-head"><h2>حالات العملاء — الدليل الإجرائي الكامل</h2>
+    <div class="desc">كل حالة ممكنة للعملاء: وصفها، مستنداتها، تسلسل إجراءاتها، توزيع المهام، ونسبة النجاح المتوقعة</div></div>
+  ${ALL_CASE_TYPES().map(ct=>`
+  <div class="acc"><button class="acc-h" onclick="accToggle(this)"><span class="badge b-gold">${ct.id}</span> ${esc(ct.t)}
+    <span class="badge ${priorityBadge(ct.urgency)}">${ct.urgency}</span><span class="badge b-green">النجاح: ${ct.success}</span><span class="chev">▾</span></button>
+  <div class="acc-b"><div class="grid g2" style="padding-top:12px">
+    <div>
+      <div class="alert gold"><b>وصف الحالة:</b> ${esc(ct.desc)}</div>
+      <b style="font-size:13px">تسلسل الإجراءات:</b>
+      <ol style="padding-right:18px;font-size:13px">${ct.steps.map(s=>`<li style="margin-bottom:5px">${esc(s)}</li>`).join("")}</ol>
+    </div>
+    <div>
+      <b style="font-size:13px">المستندات المطلوبة:</b>
+      ${ct.docs.map(d=>`<div class="chk" style="cursor:default"><span style="color:var(--gold)">📄</span><div class="chk-t">${esc(d)}</div></div>`).join("")}
+      <div class="alert info" style="margin-top:8px"><b>توزيع المهام:</b> ${esc(ct.assign)}</div>
+      <div class="alert warn"><b>تنبيه:</b> ${esc(ct.note)}</div>
+    </div></div></div></div>`).join("")}`;
+}
+function accToggle(btn){ btn.parentElement.classList.toggle("open"); }
+
+/* ============ البنوك ============ */
+function pgBanks(){
+  return `
+  <div class="page-head"><h2>البنوك الإماراتية — قاعدة البيانات الكاملة</h2><div class="desc">${BANKS.length} جهة: بنوك محلية وإسلامية وأجنبية ورقمية + الجهات الرقابية (سندك، المصرف المركزي، AECB)</div></div>
+  <div class="alert warn">⚠️ بيانات التواصل إرشادية مبنية على المصادر العامة — <b>تحقق دائمًا من الموقع الرسمي للجهة قبل إرسال أي مراسلة</b>.</div>
+  <div class="searchbar"><input id="bkSearch" placeholder="🔍 ابحث باسم البنك" oninput="renderBanks()"></div>
+  <div class="grid g3" id="banksGrid"></div>`;
+}
+function renderBanks(){
+  const q = (document.getElementById("bkSearch")?.value||"").trim();
+  const list = BANKS.filter(b=>!q || (b.ar+b.en).includes(q));
+  document.getElementById("banksGrid").innerHTML = list.map(b=>`
+    <div class="bank-card" onclick="bankDetail('${b.id}')">
+      <div class="bk-name">🏦 ${esc(b.ar)}</div><div class="bk-en">${esc(b.en)}</div>
+      <div class="bk-tags"><span class="badge b-blue">${b.type}</span><span class="badge b-gray">📍 ${b.hq}</span>
+      <span class="badge b-gold">${b.issues.length} مخالفة مرتبطة</span></div>
+      <div style="margin-top:9px;font-size:12px;color:var(--muted)" class="num">📞 ${esc(b.phone)}</div>
+    </div>`).join("") || `<div class="empty">لا توجد نتائج</div>`;
+}
+function bankDetail(id){
+  const b = BANKS.find(x=>x.id===id);
+  const vios = VIOLATIONS.filter(v=>b.issues.includes(v.code.slice(0,99).toLowerCase())||b.issues.includes(v.code.slice(0,1).toLowerCase()));
+  const mapped = VIOLATIONS.filter(v=>{
+    const map = {fees:["V01","V02","V15"],interest:["V01","V08","V20"],harass:["V05","V06"],insur:["V04"],deduct:["V03","V13"],aecb:["V09"],wrongdata:["V09"],thirdparty:["V06"],escalation:["V10"],rest:["V07","V11","V12","V14","V16","V17","V18","V19"]};
+    return b.issues.some(i=>(map[i]||map.rest).includes(v.code));
+  });
+  openModal("🏦 "+esc(b.ar)+" — "+esc(b.en), `
+    <div class="grid g2">
+      <div class="card"><h3><span class="dot"></span>بيانات التواصل</h3>
+        <div class="stat-line"><span>النوع</span><b>${b.type}</b></div>
+        <div class="stat-line"><span>المقر</span><b>${b.hq}</b></div>
+        <div class="stat-line"><span>هاتف خدمة العملاء</span><b class="num">${b.phone}</b></div>
+        <div class="stat-line"><span>بريد الشكاوى</span><b class="num" style="direction:ltr">${b.email}</b></div>
+        <div class="stat-line"><span>بريد التصعيد</span><b class="num" style="direction:ltr">${b.esc}</b></div>
+        <div class="stat-line"><span>الموقع الرسمي</span><b><a href="https://${b.site}" target="_blank" rel="noopener" class="num" style="direction:ltr">${b.site}</a></b></div></div>
+      <div class="card"><h3><span class="dot"></span>ملاحظات إجرائية</h3><p style="font-size:13.5px">${esc(b.note||"—")}</p>
+        <div class="alert info" style="margin-top:8px"><b>مسار الشكوى القياسي:</b> شكوى داخلية إلى <span class="num" style="direction:ltr">${b.email}</span> (رد خلال 15 يوم عمل) ← تصعيد <b>سندك</b> (info@sanadak.ae) ← القضاء عند اللزوم.</div></div>
+    </div>
+    <div class="card"><h3><span class="dot"></span>أبرز المخالفات المرتبطة بهذه الجهة</h3>
+      <div class="tbl-wrap small"><table class="tbl"><thead><tr><th>الرمز</th><th>المخالفة</th><th>الإجراء المتبع</th></tr></thead><tbody>
+        ${mapped.map(v=>`<tr><td><span class="badge b-red">${v.code}</span></td><td><b>${esc(v.title)}</b></td><td style="font-size:12px">${esc(v.action)}</td></tr>`).join("")}
+      </tbody></table></div></div>
+  `, `<button class="btn ghost" onclick="closeModal()">إغلاق</button>`, true);
+}
+
+/* ============ المخالفات والجزاءات ============ */
+function pgViolations(){
+  return `
+  <div class="page-head"><h2>المخالفات والجزاءات — الجدول القانوني الكامل</h2>
+    <div class="desc">${VIOLATIONS.length} مخالفة مصرفية مرقّمة، ولكل منها: الوصف، السند القانوني، الإجراء المتبع، والجزاء على البنك</div></div>
+  <div class="card">
+    <div class="searchbar"><input id="viSearch" placeholder="🔍 ابحث في المخالفات" oninput="renderVios()"></div>
+    <div class="tbl-wrap"><table class="tbl"><thead><tr>
+      <th style="width:64px">الرمز</th><th style="width:220px">المخالفة</th><th>الوصف</th><th style="width:210px">السند القانوني</th><th>الإجراء</th><th style="width:200px">الجزاء على البنك</th></tr></thead>
+      <tbody id="vioBody"></tbody></table></div></div>`;
+}
+function renderVios(){
+  const q = (document.getElementById("viSearch")?.value||"").trim();
+  const list = VIOLATIONS.filter(v=>!q||(v.title+v.desc+v.code).includes(q));
+  document.getElementById("vioBody").innerHTML = list.map(v=>`
+    <tr><td><span class="badge b-red">${v.code}</span></td>
+    <td><b>${esc(v.title)}</b></td><td style="font-size:12.3px">${esc(v.desc)}</td>
+    <td style="font-size:11.8px;color:var(--muted)">${esc(v.legal)}</td>
+    <td style="font-size:12.3px">${esc(v.action)}</td>
+    <td style="font-size:12px"><span class="badge b-amber">${esc(v.penalty)}</span></td></tr>`).join("");
+}
+
+/* ============ القوانين ============ */
+function pgLaws(){
+  return `
+  <div class="page-head"><h2>القوانين المرجعية</h2><div class="desc">المرجعية القانونية الكاملة لمكتب النصر في دعاوى البطاقات الائتمانية</div></div>
+  ${LAWS.map((l,i)=>`<div class="law-item"><span class="l-tag">${esc(l.tag)}</span>
+    <div class="l-t" style="margin-top:6px">${esc(l.t)}</div><div class="l-d">${esc(l.d)}</div></div>`).join("")}
+  <div class="alert danger"><b>تنبيه مهني:</b> يُراجع الباحث القانوني التحديثات الدورية لهذه النصوص (تعديلات وقرارات جديدة للمصرف المركزي) ويُبلغ المستشار بها لتعديل المسارات والقوالب عند اللزوم.</div>`;
+}
+
+/* ============ القوالب ============ */
+function pgTemplates(){
+  const cats = [...new Set(ALL_TEMPLATES().map(t=>t.cat))];
+  return `
+  <div class="page-head"><h2>نماذج الإيميلات والردود الجاهزة</h2>
+    <div class="actions no-print"><button class="btn ghost" onclick="printArea()">🖨️ طباعة</button></div>
+    <div class="desc">${ALL_TEMPLATES().length} نموذج جاهز للنسخ — استبدل كل ما بين [الأقواس] ببيانات العميل ثم اعتمده من المستشار قبل الإرسال</div></div>
+  <div class="tabs no-print">${cats.map((c,i)=>`<button class="tab ${i===0?"active":""}" onclick="filterTemplates('${c}',this)">${c}</button>`).join("")}
+  <button class="tab" onclick="filterTemplates('',this)">الكل</button></div>
+  <div id="tmplList">${renderTemplateCards("")}</div>`;
+}
+function renderTemplateCards(cat){
+  return ALL_TEMPLATES().filter(t=>!cat||t.cat===cat).map(t=>`
+  <div class="template-card">
+    <div class="t-head"><span class="badge b-gold">${t.id}</span><b>${esc(t.title)}</b>
+      <div class="t-actions"><span class="badge b-blue">${t.cat}</span>
+      <button class="btn small ghost" onclick="copyText(templatesById('${t.id}'),this)">📋 نسخ</button>
+      <button class="btn small ghost" onclick="tmplExpand(this)">⬇️ توسيع</button></div></div>
+    <div class="t-body">📧 إلى: ${esc(t.to)}\n✏️ الموضوع: ${esc(t.subject)}\n\n${esc(t.body)}<div class="t-fade"></div></div>
+  </div>`).join("");
+}
+function templatesById(id){ const t = tmplOf(id); return "إلى: "+t.to+"\nالموضوع: "+t.subject+"\n\n"+t.body; }
+function tmplExpand(btn){ const b = btn.closest(".template-card").querySelector(".t-body"); b.classList.toggle("open"); const f = b.querySelector(".t-fade"); if(f) f.remove(); }
+function filterTemplates(cat, btn){
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active")); btn.classList.add("active");
+  document.getElementById("tmplList").innerHTML = renderTemplateCards(cat);
+}
+/* ============ حاسبة المديونية ============ */
+function pgCalc(){
+  return `
+  <div class="page-head"><h2>حاسبة المديونية — أداة المحاسب</h2>
+    <div class="desc">فصل دقيق: أصل الدين، الفوائد النظامية، الرسوم، والمبالغ المخالفة القابلة للإلغاء — وفق عقد البطاقة ومعايير حماية المستهلك</div></div>
+  <div class="grid g2">
+    <div class="card"><h3><span class="dot"></span>المدخلات</h3>
+      <div class="field"><label>اسم العميل / ملف القضية</label><input id="dcName" placeholder="مثال: CS-100001"></div>
+      <div class="frow">
+        <div class="field"><label>أصل الدين — الإنفاق الفعلي (درهم)</label><input id="dcPrincipal" type="number" value="0"></div>
+        <div class="field"><label>نسبة الفائدة الشهرية % (من العقد)</label><input id="dcRate" type="number" step="0.01" value="3.25"></div>
+      </div>
+      <div class="frow">
+        <div class="field"><label>عدد الشهور المتأخرة/المحتسبة</label><input id="dcMonths" type="number" value="0"></div>
+        <div class="field"><label>رسوم تأخير شهرية محصلة (درهم)</label><input id="dcLate" type="number" value="0"></div>
+      </div>
+      <div class="frow">
+        <div class="field"><label>رسوم أخرى (سنوية/تأمين/صرف) (درهم)</label><input id="dcFees" type="number" value="0"></div>
+        <div class="field"><label>خصومات غير مصرح بها قابلة للاسترداد (درهم)</label><input id="dcIllegal" type="number" value="0"></div>
+      </div>
+      <div class="frow">
+        <div class="field"><label>ما سدده العميل بالفعل (درهم)</label><input id="dcPaid" type="number" value="0"></div>
+        <div class="field"><label>نسبة التسوية المستهدفة %</label><input id="dcTarget" type="number" value="60"></div>
+      </div>
+      <button class="btn primary" style="width:100%" onclick="runCalc()">🧮 احسب المديونية</button></div>
+    <div class="card" id="calcOut"><div class="empty"><div class="e-ic">🧮</div>أدخل البيانات واضغط احسب</div></div>
+  </div>`;
+}
+function initCalc(){ /* ready */ }
+function runCalc(){
+  const P = num("dcPrincipal"), r = num("dcRate")/100, m = num("dcMonths");
+  const late = num("dcLate"), fees = num("dcFees"), illegal = num("dcIllegal"), paid = num("dcPaid"), target = num("dcTarget");
+  const name = val("dcName")||"—";
+  let bal = P, intTotal = 0, rows = "";
+  for(let i=0;i<Math.min(m,120);i++){ const it = bal*r; intTotal+=it; bal = bal + it; }
+  intTotal = Math.round(intTotal); bal = Math.round(bal);
+  const bankClaim = bal + late + fees + illegal;
+  const legalClaim = P + intTotal;
+  const excess = bankClaim - legalClaim;
+  const net = Math.max(bankClaim - paid, 0);
+  const settlement = Math.round(net * target/100);
+  const fee = Math.max(Math.round(net * DB.settings.feePercent/100), DB.settings.minFee);
+  document.getElementById("calcOut").innerHTML = `
+    <h3><span class="dot"></span>النتيجة — ${esc(name)}</h3>
+    <div class="stat-line"><span>أصل الدين</span><b class="num">${fmt(P)} درهم</b></div>
+    <div class="stat-line"><span>الفوائد المحتسبة (${(r*100).toFixed(2)}% شهري × ${m} شهر)</span><b class="num">${fmt(intTotal)} درهم</b></div>
+    <div class="stat-line"><span>الرسوم المتأخرة المحصلة</span><b class="num">${fmt(late)} درهم</b></div>
+    <div class="stat-line"><span>رسوم أخرى</span><b class="num">${fmt(fees)} درهم</b></div>
+    <div class="stat-line"><span>خصومات غير مصرح بها</span><b class="num" style="color:var(--red)">${fmt(illegal)} درهم</b></div>
+    <div class="stat-line"><span>مسدَّد من العميل</span><b class="num" style="color:var(--green)">-${fmt(paid)} درهم</b></div>
+    <div class="stat-line" style="background:#fdf8ec;margin-top:8px;border-radius:8px;padding:10px"><span><b>المطلوب من البنك (صافي)</b></span><b class="num" style="font-size:17px">${fmt(net)} درهم</b></div>
+    <div class="stat-line"><span>مطالبة البنك الظاهرة</span><b class="num">${fmt(bankClaim)} درهم</b></div>
+    <div class="stat-line"><span>السند النظامي (أصل + فوائد)</span><b class="num">${fmt(legalClaim)} درهم</b></div>
+    <div class="stat-line" style="background:#fef2f2;border-radius:8px;padding:10px"><span><b>الفائض المخالف القابل للإلغاء</b></span><b class="num" style="color:var(--red);font-size:16px">${fmt(Math.max(excess,0))} درهم</b></div>
+    <div class="stat-line"><span>هدف التسوية (${target}%)</span><b class="num">${fmt(settlement)} درهم</b></div>
+    <div class="stat-line"><span>أتعاب المكتب المقترحة (${DB.settings.feePercent}% — حد أدنى ${fmt(DB.settings.minFee)})</span><b class="num">${fmt(fee)} درهم</b></div>
+    <button class="btn ghost" style="margin-top:12px" onclick="window.print()">🖨️ طباعة الحساب</button>`;
+  toast("تم الحساب","ok");
+}
+
+/* ============ المستردات والأتعاب ============ */
+function pgPayments(){
+  const rec = DB.payments.filter(p=>p.type==="استرداد").reduce((a,p)=>a+Number(p.amount||0),0);
+  const fee = DB.payments.filter(p=>p.type==="أتعاب").reduce((a,p)=>a+Number(p.amount||0),0);
+  return `
+  <div class="page-head"><h2>المستردات والأتعاب</h2><div class="actions">
+    <button class="btn primary" onclick="paymentForm()">➕ تسجيل مبلغ</button></div>
+    <div class="desc">سجل المدفوعات: المبالغ المستردة للعملاء وأتعاب المكتب وفق نسبة النجاح</div></div>
+  <div class="grid g3">
+    <div class="kpi teal"><span class="k-icon">💰</span><div class="k-label">إجمالي المستردات</div><div class="k-val num">${fmt(rec)}</div><div class="k-sub">درهم</div></div>
+    <div class="kpi purple"><span class="k-icon">🧾</span><div class="k-label">إجمالي الأتعاب</div><div class="k-val num">${fmt(fee)}</div><div class="k-sub">درهم</div></div>
+    <div class="kpi navy"><span class="k-icon">📄</span><div class="k-label">عدد السجلات</div><div class="k-val num">${DB.payments.length}</div><div class="k-sub">سجل</div></div>
+  </div>
+  <div class="card"><h3><span class="dot"></span>سجل المدفوعات</h3>
+    ${DB.payments.length?`<div class="tbl-wrap"><table class="tbl"><thead><tr><th>التاريخ</th><th>النوع</th><th>القضية</th><th>المبلغ (درهم)</th><th>ملاحظة</th><th></th></tr></thead><tbody>
+      ${DB.payments.slice().reverse().map((p,i)=>`<tr><td class="num">${esc(p.date)}</td><td><span class="badge ${p.type==="استرداد"?"b-green":"b-purple"}">${esc(p.type)}</span></td>
+      <td>${esc(p.caseId||"—")}</td><td class="num">${fmt(p.amount)}</td><td>${esc(p.note||"—")}</td>
+      <td>${can("all")?`<button class="btn small danger" onclick="delPayment(${DB.payments.indexOf(p)})">🗑️</button>`:""}</td></tr>`).join("")}
+    </tbody></table></div>`:`<div class="empty"><div class="e-ic">💰</div>لا توجد سجلات بعد</div>`}
+  </div>`;
+}
+function paymentForm(){
+  openModal("تسجيل مبلغ", `
+    <div class="frow">
+      <div class="field"><label>النوع</label><select id="pfType"><option>استرداد</option><option>أتعاب</option></select></div>
+      <div class="field"><label>القضية</label><select id="pfCase"><option value="">— بدون —</option>${DB.cases.map(c=>`<option value="${c.id}">${c.id} — ${esc(clientById(c.clientId)?.name||"")}</option>`).join("")}</select></div>
+    </div>
+    <div class="frow">
+      <div class="field"><label>المبلغ (درهم) *</label><input id="pfAmount" type="number"></div>
+      <div class="field"><label>التاريخ</label><input id="pfDate" type="date" value="${today()}"></div>
+    </div>
+    <div class="field"><label>ملاحظة</label><input id="pfNote"></div>
+  `, `<button class="btn ghost" onclick="closeModal()">إلغاء</button><button class="btn primary" onclick="savePayment()">💾 حفظ</button>`);
+}
+function savePayment(){
+  const a = num("pfAmount"); if(!a){ toast("أدخل المبلغ","err"); return; }
+  DB.payments.push({type:val("pfType"), caseId:val("pfCase"), amount:a, date:val("pfDate")||today(), note:val("pfNote")});
+  logAct("تسجيل "+val("pfType")+" بمبلغ "+fmt(a)); saveDB(); closeModal(); toast("تم التسجيل","ok"); go("payments");
+}
+function delPayment(i){ if(!confirm("حذف السجل؟")) return; DB.payments.splice(i,1); saveDB(); go("payments"); }
+
+/* ============ الموظفون والأدوار ============ */
+function pgEmployees(){
+  const uOf = r => DB.users.filter(u=>u.role===r.id);
+  return `
+  <div class="page-head"><h2>الموظفون والأدوار — المهام والأدوات</h2>
+    <div class="desc">هيكل مكتب النصر: كل دور بمهامه وأدواته ولائحته الإرشادية اليومية</div></div>
+  <div class="grid g2">
+  ${ROLES.map(r=>`
+  <div class="role-card">
+    <div class="r-head" style="background:linear-gradient(135deg,${r.color},#1a2f56)">
+      <div class="r-ic">${r.ic}</div><div><div class="r-t">${esc(r.t)}</div><div class="r-s">${esc(r.s)}</div></div></div>
+    <div class="r-body">
+      <b style="font-size:13px;color:var(--navy-700)">المهام:</b>
+      <ul style="padding-right:18px;font-size:12.8px">${r.tasks.map(t=>`<li style="margin-bottom:3px">${esc(t)}</li>`).join("")}</ul>
+      <b style="font-size:13px;color:var(--navy-700)">الأدوات:</b>
+      <div style="margin:6px 0">${r.tools.map(t=>`<span class="pill" style="cursor:default;margin:2px">🛠️ ${esc(t)}</span>`).join("")}</div>
+      <div class="alert gold"><b>اللائحة الإرشادية اليومية:</b><ol style="padding-right:16px;margin-top:5px">${r.guideline.map(g=>`<li style="font-size:12.5px;margin-bottom:3px">${esc(g)}</li>`).join("")}</ol></div>
+      <div style="font-size:12px;color:var(--muted)">حسابات النظام بهذا الدور: ${uOf(r).map(u=>`<span class="badge b-gray num">${esc(u.u)}</span>`).join(" ")||"—"}</div>
+    </div></div>`).join("")}
+  </div>`;
+}
+
+/* ============ المهام ============ */
+function pgTasks(){
+  const canCreate = can("all");
+  return `
+  <div class="page-head"><h2>المهام</h2><div class="actions">
+    ${canCreate?`<button class="btn primary" onclick="taskForm()">➕ مهمة جديدة</button>`:""}</div>
+    <div class="desc">توزيع المهام على الفريق — مهامك مميزة تلقائيًا</div></div>
+  <div class="card"><h3><span class="dot"></span>مهامي (${DB.tasks.filter(t=>t.assignee===CUR.u&&t.status!=="منجزة").length})</h3>
+    <div id="myTasks">${renderTaskList(t=>t.assignee===CUR.u)}</div></div>
+  <div class="card"><h3><span class="dot"></span>كل المهام</h3><div id="allTasks">${renderTaskList(()=>true)}</div></div>`;
+}
+function renderTaskList(filter){
+  const list = DB.tasks.filter(filter).slice().reverse();
+  if(!list.length) return `<div class="empty"><div class="e-ic">✅</div>لا توجد مهام</div>`;
+  return list.map(t=>`<div class="task-row">
+    <input type="checkbox" style="width:18px;height:18px;accent-color:#b8923c" ${t.status==="منجزة"?"checked":""} onchange="toggleTask('${t.id}',this.checked)">
+    <div style="flex:1"><div style="font-weight:700;${t.status==="منجزة"?"text-decoration:line-through;color:#94a3b8":""}">${esc(t.title)}</div>
+    <div style="font-size:11.5px;color:var(--muted)">المكلَّف: ${esc(userName(t.assignee))} | القضية: ${esc(t.caseId||"—")} | إنجاز: <b class="num">${esc(t.due||"—")}</b></div></div>
+    <span class="badge ${t.status==="منجزة"?"b-green":(t.due&&t.due<today()?"b-red":"b-amber")}">${t.status==="منجزة"?"منجزة":(t.due&&t.due<today()?"متأخرة":"قائمة")}</span>
+  </div>`).join("");
+}
+function userName(u){ const x = DB.users.find(z=>z.u===u); return x?x.name:(u||"—"); }
+function toggleTask(id, on){ const t = DB.tasks.find(x=>x.id===id); t.status = on?"منجزة":"قائمة"; if(on) t.done=today(); saveDB(); logAct("تحديث مهمة: "+t.title); buildNav(); go("tasks"); }
+function taskForm(){
+  openModal("مهمة جديدة", `
+    <div class="field"><label>عنوان المهمة *</label><input id="tkTitle"></div>
+    <div class="frow">
+      <div class="field"><label>المكلَّف</label><select id="tkUser">${DB.users.map(u=>`<option value="${u.u}">${esc(u.name)}</option>`).join("")}</select></div>
+      <div class="field"><label>تاريخ الإنجاز</label><input id="tkDue" type="date" value="${today()}"></div>
+    </div>
+    <div class="field"><label>مرتبطة بقضية</label><select id="tkCase"><option value="">— بدون —</option>${DB.cases.map(c=>`<option value="${c.id}">${c.id} — ${esc(clientById(c.clientId)?.name||"")}</option>`).join("")}</select></div>
+  `, `<button class="btn ghost" onclick="closeModal()">إلغاء</button><button class="btn primary" onclick="saveTask()">💾 حفظ</button>`);
+}
+function saveTask(){
+  if(!val("tkTitle")){ toast("اكتب عنوان المهمة","err"); return; }
+  DB.tasks.push({id:uid("TK"), title:val("tkTitle"), assignee:val("tkUser"), due:val("tkDue"), caseId:val("tkCase"), status:"قائمة", created:today()});
+  logAct("مهمة جديدة: "+val("tkTitle")); saveDB(); closeModal(); toast("تمت الإضافة","ok"); go("tasks");
+}
+
+/* ============ الملف التدريبي ============ */
+function pgTraining(){
+  return `
+  <div class="page-head"><h2>الملف التدريبي — شرح كامل للنظام</h2>
+    <div class="desc">دليل تأهيل أي موظف جديد: اقرأ الفصول بالترتيب ثم نفّذ حالة مرافقة مع باحث قانوني</div></div>
+  ${TRAINING.map((ch,i)=>`
+  <div class="acc"><button class="acc-h" onclick="accToggle(this)"><span class="badge b-gold">${i+1}</span> ${esc(ch.t)}<span class="chev">▾</span></button>
+  <div class="acc-b"><ul style="padding-right:18px;padding-top:10px;font-size:13.5px">${ch.c.map(x=>`<li style="margin-bottom:7px">${esc(x)}</li>`).join("")}</ul></div></div>`).join("")}
+  <div class="alert gold"><b>اختبار التأهيل:</b> قبل العمل الميداني — أنشئ عميلًا تجريبيًا، افتح قضية، نفّذ المراحل العشر على نموذج، وأرسل رسالة اعتراض محاكاة (T01) لاعتماد المستشار.</div>`;
+}
+
+/* ============ اللائحة الإرشادية ============ */
+function pgGuideline(){
+  return `
+  <div class="page-head"><h2>اللائحة الإرشادية للموظفين</h2>
+    <div class="desc">الإجراء الواجب اتخاذه مع كل حالة — إلزامي على جميع الموظفين</div></div>
+  ${GUIDELINE.map(g=>`<div class="card"><h3><span class="dot"></span>${esc(g.t)}</h3>
+    ${g.items.map((x,i)=>`<div class="chk" style="cursor:default"><span class="badge b-gold">${i+1}</span><div class="chk-t">${esc(x)}</div></div>`).join("")}</div>`).join("")}
+  <div class="card"><h3><span class="dot"></span>الإجراء الإلزامي حسب حالة العميل — خريطة سريعة</h3>
+    <div class="tbl-wrap"><table class="tbl"><thead><tr><th>الحالة</th><th>الإجراء الواجب فورًا</th><th>القالب</th><th>المسؤول الأول</th></tr></thead><tbody>
+    ${ALL_CASE_TYPES().map(ct=>`<tr><td><b>${esc(ct.t)}</b></td><td style="font-size:12.5px">${esc(ct.steps[0])} ← ${esc(ct.steps[1])}</td>
+      <td><span class="badge b-gold">${(ct.steps.find(s=>/T\d\d/.test(s))||"").match(/T\d\d/)?.[0]||"T01"}</span></td>
+      <td>${esc(ct.urgency==="عاجلة جدًا"?"المستشار + الاستقبال":"الاستقبال")}</td></tr>`).join("")}
+    </tbody></table></div></div>`;
+}
+
+/* ============ الإدارة والمستخدمون ============ */
+function pgAdmin(){
+  return `
+  <div class="page-head"><h2>الإدارة والمستخدمون — صلاحيات كاملة للمستشار عبدالرحمن نصر</h2>
+    <div class="actions"><button class="btn primary" onclick="userForm()">➕ مستخدم جديد</button></div>
+    <div class="desc">إدارة الحسابات والصلاحيات وإعدادات المكتب وسجل النشاط الكامل</div></div>
+  <div class="card"><h3><span class="dot"></span>المستخدمون</h3>
+    <div class="tbl-wrap"><table class="tbl"><thead><tr><th>الاسم</th><th>اسم الدخول</th><th>الدور</th><th>الحالة</th><th></th></tr></thead><tbody>
+    ${DB.users.map((u,i)=>`<tr><td><b>${esc(u.name)}</b></td><td class="num">${esc(u.u)}</td>
+      <td><span class="badge ${u.role==="manager"?"b-gold":"b-gray"}">${esc(roleOf(u.role)?.t||u.role)}</span></td>
+      <td><span class="badge ${u.active?"b-green":"b-red"}">${u.active?"نشط":"موقوف"}</span></td>
+      <td style="white-space:nowrap">
+        <button class="btn small ghost" onclick="userForm(${i})">✏️</button>
+        <button class="btn small ${u.active?"danger":"ghost"}" onclick="toggleUser(${i})">${u.active?"⏸️ إيقاف":"▶️ تفعيل"}</button></td></tr>`).join("")}
+    </tbody></table></div></div>
+  <div class="grid g2">
+    <div class="card"><h3><span class="dot"></span>مصفوفة الصلاحيات</h3>
+      <div class="tbl-wrap"><table class="tbl perm-matrix"><thead><tr><th>القسم</th><th>استقبال</th><th>إداري</th><th>باحث</th><th>محاسب</th><th>المستشار</th></tr></thead><tbody>
+      ${[["العملاء: عرض",1,1,1,1,1],["العملاء: إضافة",1,0,0,0,1],["العملاء: تعديل",0,1,0,0,1],["المستندات والمراسلات",0,1,1,0,1],["التحليل القانوني",0,0,1,0,1],["الحسابات والمديونية",0,0,0,1,1],["المالية والأتعاب",0,0,0,1,1],["القوالب: عرض",1,1,1,1,1],["القوالب: تعديل",0,0,1,0,1],["المهام",1,1,1,1,1],["إدارة المستخدمين",0,0,0,0,1],["إعدادات النظام",0,0,0,0,1]]
+      .map(row=>`<tr>${row.map((c,i)=>i===0?`<td>${esc(c)}</td>`:`<td class="${c?"yes":"no"}">${c?"✔":"✘"}</td>`).join("")}</tr>`).join("")}
+      </tbody></table></div>
+      <div class="alert gold" style="margin-top:10px">المستشار عبدالرحمن نصر يملك <b>كافة الصلاحيات</b> بلا استثناء — وهو الجهة الوحيدة المخوّلة بإدارة المستخدمين والاعتمادات.</div></div>
+    <div class="card"><h3><span class="dot"></span>إعدادات المكتب</h3>
+      <div class="field"><label>اسم المكتب</label><input id="stOffice" value="${esc(DB.settings.office)}"></div>
+      <div class="field"><label>المدير المسؤول</label><input id="stManager" value="${esc(DB.settings.manager)}"></div>
+      <div class="frow">
+        <div class="field"><label>نسبة الأتعاب % (على النجاح)</label><input id="stFee" type="number" value="${DB.settings.feePercent}"></div>
+        <div class="field"><label>الحد الأدنى للأتعاب (درهم)</label><input id="stMin" type="number" value="${DB.settings.minFee}"></div>
+      </div>
+      <button class="btn primary" onclick="saveSettings()">💾 حفظ الإعدادات</button></div>
+  </div>
+  <div class="card"><h3><span class="dot"></span>سجل النشاط الكامل (آخر 300 إجراء)</h3>
+    ${DB.logs.length?`<div class="tbl-wrap small"><table class="tbl"><thead><tr><th>الوقت</th><th>المستخدم</th><th>الإجراء</th></tr></thead><tbody>
+    ${DB.logs.map(l=>`<tr><td class="num">${esc(l.t)}</td><td>${esc(l.u)}</td><td>${esc(l.txt)}</td></tr>`).join("")}</tbody></table></div>`:`<div class="empty">لا يوجد نشاط</div>`}</div>`;
+}
+function saveSettings(){
+  DB.settings.office = val("stOffice"); DB.settings.manager = val("stManager");
+  DB.settings.feePercent = num("stFee")||10; DB.settings.minFee = num("stMin")||0;
+  saveDB(); logAct("تعديل إعدادات النظام"); toast("تم حفظ الإعدادات","ok");
+}
+function userForm(i){
+  const u = i!=null?DB.users[i]:null;
+  openModal(u?"تعديل مستخدم":"مستخدم جديد", `
+    <div class="frow">
+      <div class="field"><label>الاسم الكامل *</label><input id="ufName" value="${u?esc(u.name):""}"></div>
+      <div class="field"><label>اسم الدخول *</label><input id="ufUser" value="${u?esc(u.u):""}" ${u?"readonly":""}></div>
+    </div>
+    <div class="frow">
+      <div class="field"><label>كلمة المرور *</label><input id="ufPass" value="${u?esc(u.p):""}"></div>
+      <div class="field"><label>الدور</label><select id="ufRole">${ROLES.map(r=>`<option value="${r.id}" ${u&&u.role===r.id?"selected":""}>${esc(r.t)}</option>`).join("")}</select></div>
+    </div>
+  `, `<button class="btn ghost" onclick="closeModal()">إلغاء</button><button class="btn primary" onclick="saveUser(${i!=null?i:"null"})">💾 حفظ</button>`);
+}
+function saveUser(i){
+  if(!val("ufName")||!val("ufUser")||!val("ufPass")){ toast("أكمل كل الحقول","err"); return; }
+  const data = {name:val("ufName"), u:val("ufUser").toLowerCase(), p:val("ufPass"), role:val("ufRole"), active:true};
+  if(i!=null&&DB.users[i]) DB.users[i] = {...DB.users[i], ...data, u:DB.users[i].u};
+  else { if(DB.users.some(x=>x.u===data.u)){ toast("اسم الدخول مستخدم","err"); return; } DB.users.push(data); }
+  logAct("حفظ مستخدم: "+data.name); saveDB(); closeModal(); toast("تم الحفظ","ok"); go("adminsec");
+}
+function toggleUser(i){ const u = DB.users[i]; if(u.u==="nasser"&&u.role==="manager"){ toast("لا يمكن إيقاف حساب مدير المكتب","err"); return; }
+  u.active = !u.active; saveDB(); logAct((u.active?"تفعيل":"إيقاف")+" مستخدم: "+u.name); go("adminsec"); }
+
+function autoLogin(){
+  const s = sessionStorage.getItem("alnasr_cur"); if(!s) return;
+  const u = DB.users.find(x=>x.u===JSON.parse(s).u); if(!u) return;
+  CUR = u;
+  document.getElementById("loginScreen").style.display = "none";
+  document.getElementById("app").style.display = "block";
+  document.getElementById("uName").textContent = u.name;
+  document.getElementById("uRole").textContent = roleOf(u.role) ? roleOf(u.role).t : u.role;
+  document.getElementById("uAvatar").textContent = u.name.trim().charAt(0);
+  buildNav(); go("dashboard");
+}
+
+/* ============ INIT ============ */
+loadDB();
+window.addEventListener("DOMContentLoaded", ()=>{
+  setInterval(()=>{ const c = document.getElementById("clock");
+    if(c) c.textContent = new Date().toLocaleString("ar-AE",{weekday:"long",year:"numeric",month:"long",day:"numeric",hour:"2-digit",minute:"2-digit"}); },1000);
+  document.getElementById("loginPass").addEventListener("keydown", e=>{ if(e.key==="Enter") doLogin(); });
+  autoLogin();
+});
+</script>
+</body>
+</html>

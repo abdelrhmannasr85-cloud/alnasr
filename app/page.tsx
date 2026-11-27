@@ -3,8 +3,8 @@
 import { useMemo, useState } from "react";
 
 export default function DashboardPage() {
-  const [debt, setDebt] = useState(0);
-  const [disputed, setDisputed] = useState(0);
+  const [debt, setDebt] = useState("");
+  const [disputed, setDisputed] = useState("");
 
   const net = useMemo(() => {
     const result = Number(debt) - Number(disputed);
@@ -24,6 +24,7 @@ export default function DashboardPage() {
         <div className="brand">النصر<span>مكتب المحاماة</span></div>
         <nav>
           <a className="active">لوحة القيادة</a>
+          <a href="/erp">النظام الكامل (ERP)</a>
           <a>العملاء</a>
           <a>القضايا والملفات</a>
           <a>البنوك الإماراتية</a>
